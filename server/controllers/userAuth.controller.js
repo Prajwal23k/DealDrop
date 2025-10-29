@@ -133,8 +133,8 @@ export const handleUserSignup = async (req, res) => {
 
         return res.status(201).json({ message: "User registered successfully" });
     } catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: "Server error" });
+        console.log("Signup error details:", err);
+        return res.status(500).json({ error: err.message || "Server error" });
     }
 }
 

@@ -8,8 +8,15 @@ export const getLocationFromIp = async (ip) => {
         isp: "Unknown",
     };
 
+    // Skip API call for localhost IPs
+    if (!ip || ip === "::1" || ip === "127.0.0.1" || ip.includes("::ffff:127.0.0.1")) {
+        return defaultLocation;
+    }
+
     try {
-        const response = await axios.get(`http://ip-api.com/json/${ip}`);
+        const response = await axios.get(`http://ip-api.com/json/${ip}`, {
+            timeout: 5000 // 5 second timeout
+        });
         if (response.data.status === "success") {
             return {
                 country: response.data.country,
