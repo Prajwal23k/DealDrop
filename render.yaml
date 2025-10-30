@@ -2,7 +2,7 @@ services:
   # Backend API Service
   - type: web
     name: dealdrop-backend
-    runtime: node
+    env: node
     region: oregon
     plan: free
     buildCommand: cd server && npm install
@@ -20,10 +20,7 @@ services:
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: ORIGIN
-        fromService:
-          type: web
-          name: dealdrop-frontend
-          property: url
+        sync: false
       - key: RESEND_API_KEY
         sync: false
       - key: CLOUDINARY_CLOUD_NAME
@@ -34,11 +31,10 @@ services:
         sync: false
 
   # Frontend Static Site
-  - type: web
+  - type: static
     name: dealdrop-frontend
-    runtime: static
+    env: static
     region: oregon
-    plan: free
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: client/dist
     routes:
@@ -47,15 +43,11 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API
-        fromService:
-          type: web
-          name: dealdrop-backend
-          property: url
+        sync: false
       - key: VITE_AUCTION_API
-        fromService:
-          type: web
-          name: dealdrop-backend
-          envVarKey: url
+        sync: false
 
-# Database (Note: Render doesn't provide free MongoDB, use MongoDB Atlas)
-# Add MongoDB Atlas connection string to MONGO_URI environment variable
+# Note: 
+# 1. Use MongoDB Atlas for database (Render doesn't provide free MongoDB)
+# 2. After deploying backend, update ORIGIN in backend settings with frontend URL
+# 3. After deploying backend, update VITE_API and VITE_AUCTION_API in frontend settings with backend URL
