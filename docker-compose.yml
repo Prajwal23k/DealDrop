@@ -9,8 +9,8 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: strongpassword123
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: dealdrop
     volumes:
       - mongodb_data:/data/db
@@ -36,10 +36,10 @@ services:
     environment:
       NODE_ENV: production
       PORT: 4000
-      MONGO_URI: mongodb://admin:strongpassword123@mongodb:27017/dealdrop?authSource=admin
-      JWT_SECRET: ${JWT_SECRET:-your_super_secret_jwt_key_min_32_characters_long}
+      MONGO_URI: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/dealdrop?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: 7d
-      ORIGIN: http://localhost
+      ORIGIN: ${ORIGIN:-http://localhost}
       RESEND_API_KEY: ${RESEND_API_KEY}
       CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
