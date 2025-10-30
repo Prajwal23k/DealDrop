@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import LoadingScreen from "../components/LoadingScreen";
 import ScrollToTop from "../utils/ScrollToTop";
+import WebSocketIndicator from "../components/WebSocketIndicator";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -25,6 +26,7 @@ export const MainLayout = () => {
       <ScrollToTop />
       <Navbar />
       <Outlet />
+      <WebSocketIndicator />
       {/* <Footer /> */}
     </>
   );

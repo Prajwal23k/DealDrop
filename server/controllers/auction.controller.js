@@ -106,6 +106,23 @@ export const placeBid = async (req, res) => {
 
         product.currentPrice = bidAmount;
         await product.save();
+
+        // Get the populated product with bidder details
+        const updatedProduct = await Product.findById(id)
+            .populate('bids.bidder', 'name')
+            .populate('seller', 'name');
+
+        // Emit real-time bid update to all users viewing this auction
+        const io = req.app.get('io');
+        io.to(`auction-${id}`).emit('newBid', {
+            auctionId: id,
+            bidAmount: bidAmount,
+            bidder: updatedProduct.bids[updatedProduct.bids.length - 1].bidder,
+            currentPrice: product.currentPrice,
+            totalBids: product.bids.length,
+            timestamp: new Date()
+        });
+
         res.status(200).json({ message: "Bid placed successfully" });
     } catch (error) {
         res.status(500).json({ message: "Error placing bid", error: error.message })

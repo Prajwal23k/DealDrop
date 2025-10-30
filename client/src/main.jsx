@@ -9,17 +9,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { openRoutes } from "./routers/openRoutes.jsx";
 import InitAuth from "./init/InitAuth.jsx";
 import { adminRouter } from "./routers/adminRouter.jsx";
+import { SocketProvider } from "./context/SocketContext.jsx";
 
 const queryClient = new QueryClient();
-const router = createBrowserRouter([...adminRouter,...protectedRoutes, ...openRoutes]);
+const router = createBrowserRouter([...adminRouter, ...protectedRoutes, ...openRoutes]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <InitAuth>
-        <RouterProvider router={router} />
-        </InitAuth>
+        <SocketProvider>
+          <InitAuth>
+            <RouterProvider router={router} />
+          </InitAuth>
+        </SocketProvider>
       </Provider>
     </QueryClientProvider>
   </React.StrictMode>

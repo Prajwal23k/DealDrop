@@ -1,15 +1,18 @@
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useParams, Link } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { placeBid, viewAuction } from "../api/auction.js";
 import { useSelector } from "react-redux";
 import LoadingScreen from "../components/LoadingScreen.jsx";
+import { useSocket } from "../context/SocketContext.jsx";
 
 export const ViewAuction = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state.auth);
   const queryClient = useQueryClient();
   const inputRef = useRef();
+  const { socket, isConnected } = useSocket();
+  const [realtimeBid, setRealtimeBid] = useState(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["viewAuctions", id],
@@ -18,11 +21,48 @@ export const ViewAuction = () => {
     placeholderData: () => undefined,
   });
 
+  // Join auction room when component mounts
+  useEffect(() => {
+    if (socket && id) {
+      socket.emit('joinAuction', id);
+      console.log(`Joined auction room: ${id}`);
+
+      // Listen for new bids
+      socket.on('newBid', (bidData) => {
+        console.log('New bid received:', bidData);
+        setRealtimeBid(bidData);
+
+        // Update the cached data
+        queryClient.setQueryData(['viewAuctions', id], (oldData) => {
+          if (!oldData) return oldData;
+
+          return {
+            ...oldData,
+            currentPrice: bidData.currentPrice,
+            bids: [...oldData.bids, {
+              bidder: bidData.bidder,
+              bidAmount: bidData.bidAmount,
+              bidTime: bidData.timestamp
+            }]
+          };
+        });
+      });
+
+      // Cleanup on unmount
+      return () => {
+        socket.emit('leaveAuction', id);
+        socket.off('newBid');
+        console.log(`Left auction room: ${id}`);
+      };
+    }
+  }, [socket, id, queryClient]);
+
   const placeBidMutate = useMutation({
     mutationFn: ({ bidAmount, id }) => placeBid({ bidAmount, id }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["viewAuctions"] });
       if (inputRef.current) inputRef.current.value = "";
+      setRealtimeBid(null);
     },
     onError: (error) => {
       console.log("Error: ", error.message);
@@ -65,11 +105,10 @@ export const ViewAuction = () => {
                   {data.itemCategory}
                 </span>
                 <span
-                  className={`px-2 py-1 rounded-md text-xs font-medium ${
-                    isActive
+                  className={`px-2 py-1 rounded-md text-xs font-medium ${isActive
                       ? "bg-green-100 text-green-800"
                       : "bg-red-100 text-red-800"
-                  }`}
+                    }`}
                 >
                   {isActive ? "Active" : "Ended"}
                 </span>
@@ -81,6 +120,26 @@ export const ViewAuction = () => {
                 {data.itemDescription}
               </p>
             </div>
+
+            {/* Real-time Connection Status */}
+            {isConnected && (
+              <div className="bg-green-50 border border-green-200 rounded-md p-3 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-sm text-green-700 font-medium">
+                  Live bidding active
+                </span>
+              </div>
+            )}
+
+            {/* Real-time Bid Notification */}
+            {realtimeBid && (
+              <div className="bg-blue-50 border border-blue-200 rounded-md p-3 animate-pulse">
+                <p className="text-sm text-blue-700">
+                  🔥 <strong>{realtimeBid.bidder?.name}</strong> just placed a bid of{' '}
+                  <strong className="text-blue-900">${realtimeBid.bidAmount}</strong>
+                </p>
+              </div>
+            )}
 
             {/* Pricing Info */}
             <div className="bg-white p-6 rounded-md shadow-md border border-gray-200">
@@ -109,9 +168,8 @@ export const ViewAuction = () => {
                 <div>
                   <p className="text-sm text-gray-500">Time Left</p>
                   <p
-                    className={`text-lg font-semibold ${
-                      isActive ? "text-red-600" : "text-gray-500"
-                    }`}
+                    className={`text-lg font-semibold ${isActive ? "text-red-600" : "text-gray-500"
+                      }`}
                   >
                     {isActive ? `${daysLeft} days` : "Ended"}
                   </p>
