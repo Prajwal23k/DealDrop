@@ -35,20 +35,6 @@ npm run dev
 
 ## 2. Verify Environment Variables
 
-### Server (.env)
-Location: `server/.env`
-```env
-PORT=4000
-ORIGIN=http://localhost:3000
-MONGO_URI=mongodb://localhost:27017/dealdrop
-JWT_SECRET=dealdrop_secret_jwt_key_2024_secure_token_12345
-JWT_EXPIRES_IN=7d
-RESEND_API_KEY=re_VYHUKVaA_AiRqtRv6cQPfHZ2bVAXYXwCj
-CLOUDINARY_CLOUD_NAME=doidsoik2
-CLOUDINARY_API_KEY=172528668549179
-CLOUDINARY_API_SECRET=Rubaxjr4lJgdyY-gf97mnJPb4E0
-```
-
 ### Client (.env)
 Location: `client/.env`
 ```env

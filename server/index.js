@@ -44,6 +44,16 @@ app.use(cors({
 app.get('/', async (req, res) => {
     res.json({ msg: 'Welcome to Online Auction System API' });
 });
+
+// Health check endpoint for Docker and monitoring
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'healthy',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.use('/auth', userAuthRouter)
 app.use('/user', secureRoute, userRouter)
 app.use('/auction', secureRoute, auctionRouter);
