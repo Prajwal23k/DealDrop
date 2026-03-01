@@ -3,7 +3,7 @@ import {connect} from "./config/db.js"
 import { authRouter } from "./routes/auth.route.js";
 import { auctionRouter } from "./routes/auction.route.js";
 import { startAuctionStatusCron } from "./cron/auctionStatus.cron.js";
-import Server from "socket.io";
+import {Server} from "socket.io";
 import http from "http";
 import env from "dotenv"
 
@@ -36,3 +36,4 @@ server.listen(port,()=>
     console.log(`Server is running on http://localhost:${port}`);
 });
 
+export {io};
