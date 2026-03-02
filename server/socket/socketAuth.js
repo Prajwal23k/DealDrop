@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-
 function socketAuth(socket,next)
 {
     try{

@@ -43,7 +43,12 @@ const auctionSchema = mongoose.Schema(
             default : 0
         },
         highestBidder : {
-            type : mongoose.Schema.ObjectId,
+            type : mongoose.Schema.Types.ObjectId,
+            ref : "User",
+            default : null
+        },
+        winnerId : {
+            type : mongoose.Schema.Types.ObjectId,
             ref : "User",
             default : null
         },

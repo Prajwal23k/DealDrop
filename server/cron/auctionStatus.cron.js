@@ -17,18 +17,26 @@ function startAuctionStatusCron()
                 {
                     $set : {status : "LIVE"}
                 }
-            )
+            );
 
-            await Auction.updateMany(
+            const endingAuctions = await Auction.find(
                 {
                     status : "LIVE",
                     endTime : {$lte : now},
                     isBlocked : false
-                },
-                {
-                    $set : {status : "ENDED"}
                 }
-            )
+            );
+
+            for(const auction of endingAuctions)
+            {
+                await Auction.findByIdAndUpdate(auction._id,
+                    {
+                        status : "ENDED",
+                        winnerId : auction.highestBidder || null
+                    }
+                );
+            }
+
         }catch(e)
         {
             console.error("Auction cron error : ",e.message);

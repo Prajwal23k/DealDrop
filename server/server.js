@@ -2,7 +2,9 @@ import express from "express";
 import {connect} from "./config/db.js"
 import { authRouter } from "./routes/auth.route.js";
 import { auctionRouter } from "./routes/auction.route.js";
+import { bidRouter } from "./routes/bid.route.js";
 import { startAuctionStatusCron } from "./cron/auctionStatus.cron.js";
+import { initSocket } from "./socket/index.js";
 import {Server} from "socket.io";
 import http from "http";
 import env from "dotenv"
@@ -17,6 +19,8 @@ const io=new Server(server,{
     }
 });
 
+initSocket(io);
+
 app.use(express.json());
 
 connect();
@@ -25,6 +29,7 @@ startAuctionStatusCron();
 
 app.use("/api",authRouter);
 app.use("/api",auctionRouter);
+app.use("/api",bidRouter);
 app.get("/",(req,res)=>
 {
     res.send("Server running !!!");

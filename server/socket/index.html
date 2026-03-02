@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Test</title>
+</head>
+<body>
+  <h2>Socket.IO Auction Test</h2>
+
+  <!-- Socket.IO client -->
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+  <script>
+    // 🔴 STEP A: PASTE JWT TOKEN HERE
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OWE1ODY0ZjhmMGQwZWM3YTMxYTlkMGQiLCJyb2xlIjoiYmlkZGVyIiwiaWF0IjoxNzcyNDYzNDE2LCJleHAiOjE3NzI1NDk4MTZ9.qkGdnzt6QVFQ6y5iqfSb8_s9SlUT05OIO3P4__ggv-o";
+
+    // 🔴 STEP B: PASTE REAL AUCTION ID HERE
+    const AUCTION_ID = "69a5a4cb3acbbc1e109860cb";
+
+    // 🔌 Connect to socket server
+    const socket = io("http://localhost:5000", {
+      auth: {
+        token: token
+      }
+    });
+
+    socket.on("connect", () => {
+      console.log("✅ Socket connected");
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("❌ Socket error:", err.message);
+    });
+
+    // 👇 BID EVENTS (WE LISTEN HERE)
+    socket.on("bid-update", (data) => {
+      console.log("🔥 BID UPDATE:", data);
+    });
+
+    socket.on("bid-error", (msg) => {
+      console.log("❌ BID ERROR:", msg);
+    });
+
+    // 👇 EXPOSE FUNCTIONS TO CONSOLE
+    window.joinAuction = function () {
+      socket.emit("join-auction", AUCTION_ID);
+      console.log("Joined auction:", AUCTION_ID);
+    };
+
+    window.placeBid = function (amount) {
+      socket.emit("place-bid", {
+        auctionId: AUCTION_ID,
+        bidAmount: amount
+      });
+      console.log("Placed bid:", amount);
+    };
+  </script>
+</body>
+</html>
