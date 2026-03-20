@@ -19,9 +19,9 @@ function AuthProvider({children})
     }
 
     return(
-        <authContext.Provider value= {{user,login,logout}}>
+        <AuthContext.Provider value= {{user,login,logout}}>
             {children}
-        </authContext.Provider>
+        </AuthContext.Provider>
     );
 }
 

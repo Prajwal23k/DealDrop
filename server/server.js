@@ -7,7 +7,9 @@ import { startAuctionStatusCron } from "./cron/auctionStatus.cron.js";
 import { initSocket } from "./socket/index.js";
 import {Server} from "socket.io";
 import http from "http";
-import env from "dotenv"
+import env from "dotenv";
+import cors from "cors";
+
 
 env.config();
 
@@ -21,6 +23,7 @@ const io=new Server(server,{
 
 initSocket(io);
 
+app.use(cors());
 app.use(express.json());
 
 connect();
