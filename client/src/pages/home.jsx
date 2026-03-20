@@ -1,10 +1,24 @@
-function home()
+import { AuthContext } from "../context/authContext.jsx"
+import { useContext } from "react";
+
+function Home()
 {
+    const {user,logout} = useContext(AuthContext);
+
     return(
-        <div>
-            <input type="button" title="Hi"></input>
+        <div style={{ padding: "20px" }}>
+            <h2>Home Page</h2>
+
+            {user ? (
+                <>
+                    <p>Logged in as: {user.role}</p>
+                    <button onClick={logout}>Logout</button>
+                </>
+            ) : (
+                <p>You are not logged in</p>
+            )}
         </div>
     )
 }
 
-export {home}
+export {Home}
