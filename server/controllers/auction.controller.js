@@ -47,8 +47,19 @@ async function createAuction(req,res)
     }catch(e)
     {
         console.error("Create auction failed : ",e.message);
-        return res.status(500).json({messsage : "Internal Server Error"});
+        return res.status(500).json({message : "Internal Server Error"});
     }
 }
 
-export {createAuction};
+async function getAllAuctions(req,res)
+{
+    try{
+        const auctions = await Auction.find().sort({createdAt : -1});
+        res.status(200).json(auctions);
+    } catch (e)
+    {
+        res.status(500).json({ message: "Failed to fetch auctions" });
+    }
+}
+
+export {createAuction,getAllAuctions};

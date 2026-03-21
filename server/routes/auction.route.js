@@ -1,5 +1,5 @@
 import express from "express";
-import { createAuction } from "../controllers/auction.controller.js";
+import { createAuction,getAllAuctions } from "../controllers/auction.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import { roleMiddleware } from "../middlewares/role.middleware.js";
 
@@ -11,5 +11,7 @@ auctionRouter.post(
     roleMiddleware(["seller"]),
     createAuction
 );
+
+auctionRouter.get("/auctions", getAllAuctions);
 
 export { auctionRouter };

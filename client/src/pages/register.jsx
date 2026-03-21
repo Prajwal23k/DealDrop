@@ -1,6 +1,6 @@
 import { AuthContext } from "../context/authContext"
 
-function register()
+function Register()
 {
     const {user,logout} = useContext(AuthContext);
 
@@ -20,4 +20,4 @@ function register()
     )
 }
 
-export {register}
+export {Register}
