@@ -3,51 +3,68 @@ import { useState,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../socket/socket";
 
-function AuctionDetails()
-{
-    const {id} = useParams();
-    const [currentPrice,setCurrentPrice] = useState(0);
-    const [bidAmount,setBidAmount] = useState("");
-    const [rules,setRules] = useState(null);
+function AuctionDetails() {
+    const { id } = useParams();
 
-    useEffect(()=>
-    {
-        socket.emit("join-auction",id);
+    const [currentPrice, setCurrentPrice] = useState(0);
+    const [bidAmount, setBidAmount] = useState("");
+    const [rules, setRules] = useState(null);
+    const [bids, setBids] = useState([]);
 
-        socket.emit("get-bid-rules",id);
+    useEffect(() => {
+        fetchBids();
 
-        socket.on("bid-update", (data) => {
+        socket.emit("join-auction", id);
+        socket.emit("get-bid-rules", id);
+
+        socket.off("bid-update").on("bid-update", (data) => {
             if (data.auctionId === id) {
                 setCurrentPrice(data.currentPrice);
+
+                setBids((prev) => [
+                    {
+                        amount: data.currentPrice,
+                        bidderId: { name: "Someone" },
+                        createdAt: new Date()
+                    },
+                    ...prev
+                ]);
             }
         });
 
-        socket.on("bid-rules", (data) => {
+        socket.off("bid-rules").on("bid-rules", (data) => {
             if (data.auctionId === id) {
                 setRules(data);
-                setCurrentPrice(data.minBid - 100); 
             }
         });
 
-        socket.on("bid-error", (msg) => {
+        socket.off("bid-error").on("bid-error", (msg) => {
             alert(msg);
         });
 
-        return ()=>
-        {
+        return () => {
             socket.off("bid-update");
             socket.off("bid-rules");
+            socket.off("bid-error");
         };
-    },[id]);
+    }, [id]);
 
-    function handleBid()
-    {
+    function handleBid() {
         if (!bidAmount) return alert("Enter bid amount");
 
-        socket.emit("place-bid",{
-            auctionId : id,
-            bidAmount:Number(bidAmount)
+        socket.emit("place-bid", {
+            auctionId: id,
+            bidAmount: Number(bidAmount)
         });
+    }
+
+    async function fetchBids() {
+        try {
+            const res = await API.get(`/auction/${id}/bids`);
+            setBids(res.data.bids);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     return (
@@ -72,10 +89,26 @@ function AuctionDetails()
             <br /><br />
 
             <button onClick={handleBid}>Place Bid</button>
+
+            <h3>Bid History</h3>
+
+            {bids.length === 0 ? (
+                <p>No bids yet</p>
+            ) : (
+                <ul>
+                    {bids.map((bid, index) => (
+                        <li key={bid._id || index}>
+                            ₹{bid.amount} by {bid.bidderId?.name || "User"} at{" "}
+                            {new Date(bid.createdAt).toLocaleTimeString()}
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
 
+export default AuctionDetails;
 
 export {AuctionDetails};
 
