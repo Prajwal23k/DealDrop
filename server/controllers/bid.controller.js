@@ -10,7 +10,7 @@ async function getBidHistory(req,res)
         const skip = (page-1) * limit;
 
         const bids = await Bid.find({auctionId})
-            .populate("bidderId", "name role")
+            .populate("bidderId", "name role _id")
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);

@@ -62,4 +62,25 @@ async function getAllAuctions(req,res)
     }
 }
 
-export {createAuction,getAllAuctions};
+async function getAuctionById(req,res)
+{
+    try{
+        const {id} = req.params;
+        const auction = await Auction.findById(id)
+        .populate("winnerId","name email")
+        .populate("highestBidder","name");
+
+        if(!auction)
+        {
+            return res.status(404).json({message : "Auction Not Found"});
+        }
+
+        return res.status(200).json(auction);
+    }catch(e)
+    {
+        console.error(e.message);
+        return res.status(500).json({message : "Internal Server Error"});
+    }
+}
+
+export {createAuction,getAllAuctions,getAuctionById};

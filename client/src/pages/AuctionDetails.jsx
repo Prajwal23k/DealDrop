@@ -1,5 +1,5 @@
 import { API } from "../api/axios";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../socket/socket";
 
@@ -10,8 +10,10 @@ function AuctionDetails() {
     const [bidAmount, setBidAmount] = useState("");
     const [rules, setRules] = useState(null);
     const [bids, setBids] = useState([]);
+    const [auctionData, setAuctionData] = useState(null);
 
     useEffect(() => {
+        fetchAuction();
         fetchBids();
 
         socket.emit("join-auction", id);
@@ -67,6 +69,16 @@ function AuctionDetails() {
         }
     }
 
+    async function fetchAuction() {
+        try {
+            const res = await API.get(`/auction/${id}`);
+            setAuctionData(res.data);
+            setCurrentPrice(res.data.currentPrice);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     return (
         <div style={{ padding: "20px" }}>
             <h2>Auction Details</h2>
@@ -88,7 +100,22 @@ function AuctionDetails() {
 
             <br /><br />
 
-            <button onClick={handleBid}>Place Bid</button>
+            <button onClick={handleBid} disabled={auctionData?.status === "ENDED"}>Place Bid</button>
+            {auctionData?.status === "ENDED" && (
+                <div style={{ marginTop: "20px", padding: "10px", border: "2px solid green" }}>
+                    <h3>🏁 Auction Ended</h3>
+
+                    {auctionData.winnerId ? (
+                        <>
+                            <p>🏆 Winner: {auctionData.winnerId.name}</p>
+                            <p>💰 Winning Bid: ₹{auctionData.currentPrice}</p>
+
+                        </>
+                    ) : (
+                        <p>No bids placed</p>
+                    )}
+                </div>
+            )}
 
             <h3>Bid History</h3>
 
@@ -97,7 +124,21 @@ function AuctionDetails() {
             ) : (
                 <ul>
                     {bids.map((bid, index) => (
-                        <li key={bid._id || index}>
+                        <li key={bid._id || index} style={{
+                            color:
+                                bid.bidderId?._id === auctionData?.winnerId?._id
+                                    ? "green"
+                                    : "black",
+                            fontWeight:
+                                bid.bidderId?._id === auctionData?.winnerId?._id
+                                    ? "bold"
+                                    : "normal",
+                            background:
+                                bid.bidderId?._id === auctionData?.winnerId?._id
+                                    ? "#e6ffe6"
+                                    : "transparent",
+                            padding: "5px"
+                        }}>
                             ₹{bid.amount} by {bid.bidderId?.name || "User"} at{" "}
                             {new Date(bid.createdAt).toLocaleTimeString()}
                         </li>
@@ -108,7 +149,5 @@ function AuctionDetails() {
     );
 }
 
-export default AuctionDetails;
-
-export {AuctionDetails};
+export { AuctionDetails };
 
