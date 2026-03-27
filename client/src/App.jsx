@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import { Login } from './pages/login.jsx'
 import { Register } from './pages/register.jsx'
-import { Home } from './pages/Home.jsx'
+import { Home } from './pages/home.jsx'
 import './App.css'
 import { AuctionDetails } from './pages/AuctionDetails.jsx'
 
