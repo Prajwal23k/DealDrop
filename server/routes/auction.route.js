@@ -5,12 +5,7 @@ import { roleMiddleware } from "../middlewares/role.middleware.js";
 
 const auctionRouter = express.Router();
 
-auctionRouter.post(
-    "/auction",
-    authMiddleware,
-    roleMiddleware(["seller"]),
-    createAuction
-);
+auctionRouter.post("/createAuction",authMiddleware,roleMiddleware(["seller"]),createAuction);
 
 auctionRouter.get("/auctions", getAllAuctions);
 auctionRouter.get("/auction/:id", getAuctionById);

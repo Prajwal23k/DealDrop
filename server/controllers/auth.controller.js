@@ -111,7 +111,7 @@ async function requestSeller(req, res) {
             res.status(400).json({ message: "Already a Seller" });
         }
 
-        if (user.sellerRequest == "Pending") {
+        if (user.sellerRequest == "PENDING") {
             res.status(400).json({ message: "Request already pending" });
         }
 

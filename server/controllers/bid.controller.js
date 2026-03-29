@@ -28,4 +28,18 @@ async function getBidHistory(req,res)
     }
 }
 
-export {getBidHistory};
+async function getMyBids(req,res)
+{
+    try{
+        const userId = req.user.userId;
+
+        const bids = await Bid.find({bidderId : userId}).populate("auctionId").sort({createdAt : -1});
+        res.status(200).json(bids);
+    }catch(e)
+    {
+        console.error(e.message);
+        res.status(500).json({ message : "Failed to fetch bids "});
+    }
+}
+
+export {getBidHistory,getMyBids};

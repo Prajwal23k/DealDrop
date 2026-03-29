@@ -1,5 +1,6 @@
 import { register, login, requestSeller, getSellerRequests, approveSeller } from "../controllers/auth.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
+import {roleMiddleware} from "../middlewares/role.middleware.js"
 import express from "express";
 
 

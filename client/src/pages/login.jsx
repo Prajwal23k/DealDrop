@@ -18,7 +18,7 @@ function Login() {
         try {
             const res = await API.post("/login", { email, password });
             login(res.data);
-            navigate("/");
+            if (res.data.role === "admin") { navigate("/admin") } else { navigate("/") };
         } catch (err) {
             console.error(err);
             setError(err.response?.data?.message || "Login failed. Please verify your credentials.");
@@ -63,7 +63,7 @@ function Login() {
                                 </div>
                             </div>
                         )}
-                        
+
                         <div>
                             <label className="block text-sm font-semibold text-gray-700" htmlFor="email">
                                 Email address

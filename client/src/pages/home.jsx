@@ -21,6 +21,17 @@ function Home() {
         }
     }
 
+    async function requestSeller()
+    {
+        try{
+            const res = await API.post("/request-seller");
+            alert(res.data.message);
+        }catch(e)
+        {
+            alert(e.response?.data?.message);
+        }
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-50 font-sans text-gray-900 selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
             {/* Navigation Header */}
@@ -58,7 +69,7 @@ function Home() {
                                 <>
                                     <div className="flex flex-col text-right hidden sm:flex">
                                         <span className="text-xs text-gray-500 font-medium">Welcome back,</span>
-                                        <span className="text-gray-900 font-bold capitalize">{user.username || user.role}</span>
+                                        <span className="text-gray-900 font-bold capitalize">{user.username}</span>
                                     </div>
                                     <button
                                         onClick={logout}
@@ -201,6 +212,15 @@ function Home() {
                             ))}
                         </div>
                     )}
+                    <div>
+                        <button onClick={requestSeller}> Want to become seller
+                        </button>
+                        {user?.role === "seller" && (
+    <button onClick={() => navigate("/create-auction")}>
+        Create Auction
+    </button>
+)}
+                    </div>
                 </section>
             </main>
 
