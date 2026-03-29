@@ -126,8 +126,6 @@ async function requestSeller(req, res) {
     }
 }
 
-import { User } from "../models/user.js"
-
 async function getSellerRequests(req, res) {
     try {
         const users = await User.find({
@@ -159,4 +157,4 @@ async function approveSeller(req, res) {
         res.status(500).json({ message: "Approval failed" });
     }
 }
-export { register, login, upgradeToSeller, getSellerRequests, approveSeller };
+export { register, login, upgradeToSeller, getSellerRequests, approveSeller, requestSeller };
