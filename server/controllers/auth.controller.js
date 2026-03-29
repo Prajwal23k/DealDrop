@@ -58,28 +58,105 @@ async function login(req, res) {
     }
 
     const isSame = await bcrypt.compare(password, user.password);
-    if(!isSame)
-    {
-        return res.status(401).json({message : "Invalid Password"});
+    if (!isSame) {
+        return res.status(401).json({ message: "Invalid Password" });
     }
 
-    const token =jwt.sign(
-            {
-                userId : user._id,
-                role : user.role 
-            },
-            process.env.JWT_SECRET_KEY,
-            {
-                expiresIn : "1d"
-            }
+    const token = jwt.sign(
+        {
+            userId: user._id,
+            role: user.role
+        },
+        process.env.JWT_SECRET_KEY,
+        {
+            expiresIn: "1d"
+        }
     );
 
     return res.status(200).json({
-        message : "Login Successful !!",
+        message: "Login Successful !!",
         token,
-        userId : user._id,
-        role : user.role
+        userId: user._id,
+        role: user.role
     })
 }
 
-export { register, login };
+async function upgradeToSeller(req, res) {
+    try {
+        const userId = req.user.userId;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { role: "seller" },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            message: "Upgrade to seller successfully",
+            role: user.role
+        });
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).json({ message: "Upgrade failed" });
+    }
+}
+
+async function requestSeller(req, res) {
+    try {
+        const userId = req.user.userId;
+
+        const user = await User.findById(userId);
+
+        if (user.role == "seller") {
+            res.status(400).json({ message: "Already a Seller" });
+        }
+
+        if (user.sellerRequest == "Pending") {
+            res.status(400).json({ message: "Request already pending" });
+        }
+
+        user.sellerRequest = "PENDING";
+        await user.save();
+
+        return res.status(200).json({ message: "Seller request submitted" })
+    }
+    catch (e) {
+        console.error(e.message);
+        res.status(500).json({ message: "Request Failed" });
+    }
+}
+
+import { User } from "../models/user.js"
+
+async function getSellerRequests(req, res) {
+    try {
+        const users = await User.find({
+            sellerRequest: "PENDING"
+        }).select("name email");
+
+        res.status(200).json(users);
+    } catch (e) {
+        res.status(500).json({ message: "Error fetching requests" });
+    }
+}
+
+async function approveSeller(req, res) {
+    try {
+        const { userId } = req.params;
+        const user = await User.findByIdAndUpdate(userId,
+            {
+                role: "seller",
+                sellerRequest: "APPROVED"
+            },
+            { new: true }
+        );
+        
+        res.status(200).json({
+            message: "User approved as seller"
+        });
+
+    } catch (e) {
+        res.status(500).json({ message: "Approval failed" });
+    }
+}
+export { register, login, upgradeToSeller, getSellerRequests, approveSeller };
