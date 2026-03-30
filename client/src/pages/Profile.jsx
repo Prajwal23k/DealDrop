@@ -32,6 +32,12 @@ function Profile() {
         }
     }
 
+    async function handleLogout()
+    {
+        logout();
+        Navigate("/",{ replace : true });
+    }
+
     if (!userData) return (
         <div className="rounded-[2rem] border border-slate-200 bg-white/80 px-6 py-12 text-center shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
             <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-500">
@@ -107,7 +113,8 @@ function Profile() {
                     <h3 className="text-lg font-bold text-slate-900">
                         Access & Actions
                     </h3>
-
+                    {userData.role !== "admin" &&(
+                    <>
                     <div className="mt-5 rounded-3xl bg-gradient-to-br from-sky-50 to-indigo-50 p-5">
                         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sky-500">
                             Seller Status
@@ -116,9 +123,11 @@ function Profile() {
                             {userData.sellerRequest}
                         </p>
                     </div>
+                    </>
+                    )}
 
                     <div className="mt-6 space-y-3">
-                        {userData.role !== "seller" && (
+                        {userData.role !== "seller" && userData.role !== "admin" && (
                             <button
                                 onClick={requestSeller}
                                 className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-600"
@@ -127,11 +136,7 @@ function Profile() {
                             </button>
                         )}
 
-                        <Link
-                            to="/"
-                            className="block w-full rounded-2xl bg-rose-500 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-rose-600">
-                            Logout
-                        </Link>
+                        <button onClick={handleLogout} className="block w-full rounded-2xl bg-rose-500 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-rose-600">Logout</button>
                     </div>
                 </div>
             </div>

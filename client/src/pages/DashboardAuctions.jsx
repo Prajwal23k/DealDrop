@@ -107,7 +107,7 @@ function DashboardAuctions() {
                                         Current Bid
                                     </p>
                                     <span className="mt-2 block text-2xl font-black text-slate-900">
-                                        â‚¹{auction.currentPrice}
+                                        Rs. {auction.currentPrice}
                                     </span>
                                 </div>
 

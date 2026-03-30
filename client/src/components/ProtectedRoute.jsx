@@ -5,13 +5,12 @@ import { AuthContext } from "../context/authContext";
 function ProtectedRoute({ children }) {
     const { user, loading } = useContext(AuthContext);
 
-    // 🔥 WAIT until auth is checked
     if (loading) {
-        return <p>Loading...</p>; // or spinner
+        return <p>Loading...</p>;
     }
 
     if (!user) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/" replace />;
     }
 
     return children;

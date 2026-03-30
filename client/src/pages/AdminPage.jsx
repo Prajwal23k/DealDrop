@@ -18,6 +18,16 @@ function AdminPage() {
         fetchRequests();
     }
 
+    async function reject(userId) {
+        try {
+            await API.patch(`/reject-seller/${userId}`);
+            alert("Rejected ❌");
+            fetchRequests();
+        } catch (e) {
+            alert("Failed to reject");
+        }
+    }
+
     return (
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#eef4ff,_#f8fafc_55%,_#ffffff)] px-4 py-10 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-6xl">
@@ -144,6 +154,15 @@ function AdminPage() {
                                                 </svg>
                                                 Approve Seller
                                             </button>
+                                            <button
+                                                onClick={() => reject(user._id)}
+                                                className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-slate-900/15 transition-all duration-300 hover:scale-[1.02] hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                            >
+                                                <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                Reject Seller
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -156,4 +175,4 @@ function AdminPage() {
     );
 }
 
-export {AdminPage};
+export { AdminPage };

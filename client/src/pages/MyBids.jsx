@@ -84,7 +84,7 @@ function MyBids() {
                                                 Your Bid
                                             </p>
                                             <p className="mt-2 text-2xl font-black text-slate-900">
-                                                â‚¹{bid.amount}
+                                                Rs. {bid.amount}
                                             </p>
                                         </div>
 
@@ -93,7 +93,7 @@ function MyBids() {
                                                 Current Price
                                             </p>
                                             <p className="mt-2 text-2xl font-black text-slate-900">
-                                                â‚¹{auction?.currentPrice}
+                                                Rs. {auction?.currentPrice}
                                             </p>
                                         </div>
                                     </div>

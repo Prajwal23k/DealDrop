@@ -168,4 +168,30 @@ async function getMe(req,res)
         res.status(500).json({ message : "Failed to fetch User"});
     }
 }
-export { register, login, upgradeToSeller, getSellerRequests, approveSeller, requestSeller, getMe };
+
+async function rejectSeller(req, res) {
+    try {
+        const { userId } = req.params;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            {
+                sellerRequest: "REJECTED"
+            },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.status(200).json({
+            message: "Seller request rejected"
+        });
+
+    } catch (e) {
+        console.error(e.message);
+        res.status(500).json({ message: "Rejection failed" });
+    }
+}
+export { register, login, upgradeToSeller, getSellerRequests, approveSeller, requestSeller, getMe, rejectSeller };

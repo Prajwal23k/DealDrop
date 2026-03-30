@@ -13,9 +13,9 @@ import { MyBids } from "./pages/MyBids.jsx";
 import { Profile } from "./pages/Profile.jsx";
 import { MyAuctions } from "./pages/MyAuctions.jsx";
 
-import {ProtectedRoute} from "./components/ProtectedRoute.jsx";
-import {RoleProtectedRoute} from "./components/RoleProtectedRoute.jsx";
-import {PublicRoute} from "./components/PublicRoute.jsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
+import { RoleProtectedRoute } from "./components/RoleProtectedRoute.jsx";
+import { PublicRoute } from "./components/PublicRoute.jsx";
 
 import "./App.css";
 
@@ -24,11 +24,18 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        
-        <Route path="/" element={<Home />} />
+
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <Home />
+            </PublicRoute>
+          }
+        />
         <Route path="/auction/:id" element={<AuctionDetails />} />
 
-        
+
         <Route
           path="/login"
           element={
@@ -60,7 +67,7 @@ function App() {
           <Route path="bids" element={<MyBids />} />
           <Route path="profile" element={<Profile />} />
 
-         
+
           <Route
             path="create"
             element={

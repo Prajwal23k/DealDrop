@@ -37,7 +37,7 @@ function Sidebar() {
 
                 <nav className="mt-8 flex-1 space-y-2">
                     <NavLink
-                        to="/dashboard"
+                        to="/dashboard" end
                         className={({ isActive }) =>
                             `${linkClass({ isActive })} group flex items-center justify-between rounded-2xl border border-transparent px-4 py-3 ${
                                 isActive
