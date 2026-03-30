@@ -1,43 +1,97 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { Login } from './pages/Login.jsx'
-import { Register } from './pages/register.jsx'
-import { Home } from './pages/Home.jsx'
-import { AdminPage } from './pages/AdminPage.jsx'
-import './App.css'
-import { AuctionDetails } from './pages/AuctionDetails.jsx'
-import { CreateAuction } from "./pages/createAuction.jsx"
-import { DashboardLayout } from "./components/DashboardLayout.jsx"
-import { DashboardHome } from "./pages/DashboardHome.jsx"
-import { DashboardAuctions } from "./pages/DashboardAuctions.jsx"
-import { MyBids } from "./pages/MyBids.jsx"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { Login } from "./pages/Login.jsx";
+import { Register } from "./pages/Register.jsx";
+import { Home } from "./pages/Home.jsx";
+import { AdminPage } from "./pages/AdminPage.jsx";
+import { AuctionDetails } from "./pages/AuctionDetails.jsx";
+import { CreateAuction } from "./pages/CreateAuction.jsx";
+import { DashboardLayout } from "./components/DashboardLayout.jsx";
+import { DashboardHome } from "./pages/DashboardHome.jsx";
+import { DashboardAuctions } from "./pages/DashboardAuctions.jsx";
+import { MyBids } from "./pages/MyBids.jsx";
+import { Profile } from "./pages/Profile.jsx";
+import { MyAuctions } from "./pages/MyAuctions.jsx";
+
+import {ProtectedRoute} from "./components/ProtectedRoute.jsx";
+import {RoleProtectedRoute} from "./components/RoleProtectedRoute.jsx";
+import {PublicRoute} from "./components/PublicRoute.jsx";
+
+import "./App.css";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/auction/:id" element={<AuctionDetails />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/create-auction" element={<CreateAuction />} />
 
-        <Route path="/dashboard" element={<DashboardLayout />}>
+        
+        <Route path="/" element={<Home />} />
+        <Route path="/auction/:id" element={<AuctionDetails />} />
+
+        
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<DashboardHome />} />
           <Route path="auctions" element={<DashboardAuctions />} />
           <Route path="bids" element={<MyBids />} />
-          {/* <Route path="profile" element={<Profile />} /> */}
+          <Route path="profile" element={<Profile />} />
 
-          {/* Seller */}
-          <Route path="create" element={<CreateAuction />} />
-          {/* <Route path="my-auctions" element={<MyAuctions />} /> */}
+         
+          <Route
+            path="create"
+            element={
+              <RoleProtectedRoute allowedRoles={["seller"]}>
+                <CreateAuction />
+              </RoleProtectedRoute>
+            }
+          />
 
-          {/* Admin */}
-          <Route path="requests" element={<AdminPage />} />
+          <Route
+            path="my-auctions"
+            element={
+              <RoleProtectedRoute allowedRoles={["seller"]}>
+                <MyAuctions />
+              </RoleProtectedRoute>
+            }
+          />
+
+          <Route
+            path="requests"
+            element={
+              <RoleProtectedRoute allowedRoles={["admin"]}>
+                <AdminPage />
+              </RoleProtectedRoute>
+            }
+          />
         </Route>
+
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

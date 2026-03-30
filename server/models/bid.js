@@ -22,7 +22,7 @@ const bidSchema = mongoose.Schema(
         }
     },
     {
-        timeStamps : true
+        timestamps : true
     }
 );
 

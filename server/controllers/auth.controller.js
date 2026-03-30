@@ -108,11 +108,11 @@ async function requestSeller(req, res) {
         const user = await User.findById(userId);
 
         if (user.role == "seller") {
-            res.status(400).json({ message: "Already a Seller" });
+            return res.status(400).json({ message: "Already a Seller" });
         }
 
         if (user.sellerRequest == "PENDING") {
-            res.status(400).json({ message: "Request already pending" });
+            return res.status(400).json({ message: "Request already pending" });
         }
 
         user.sellerRequest = "PENDING";
@@ -157,4 +157,15 @@ async function approveSeller(req, res) {
         res.status(500).json({ message: "Approval failed" });
     }
 }
-export { register, login, upgradeToSeller, getSellerRequests, approveSeller, requestSeller };
+
+async function getMe(req,res)
+{
+    try{
+        const user = await User.findById(req.user.userId).select("-password");
+        res.status(200).json(user);
+    }catch(e)
+    {
+        res.status(500).json({ message : "Failed to fetch User"});
+    }
+}
+export { register, login, upgradeToSeller, getSellerRequests, approveSeller, requestSeller, getMe };

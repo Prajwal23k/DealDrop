@@ -83,4 +83,22 @@ async function getAuctionById(req,res)
     }
 }
 
-export {createAuction,getAllAuctions,getAuctionById};
+async function getMyAuctions(req,res)
+{
+    try{
+        const userId = req.user.userId;
+        const auctions = await Auction.find(
+            {
+                sellerId : userId
+            }
+        ).populate("winnerId","name").sort({ createdAt:-1});
+
+        res.status(200).json(auctions);
+    }catch(e)
+    {
+        console.error(e.message);
+        res.status(500).json({ message : "Failed to fetch auctions"});
+    }
+}
+
+export {createAuction,getAllAuctions,getAuctionById,getMyAuctions};

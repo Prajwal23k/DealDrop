@@ -33,29 +33,27 @@ function Home() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50 font-sans text-gray-900 selection:bg-indigo-100 selection:text-indigo-900 overflow-x-hidden">
-            {/* Navigation Header */}
-            <nav className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
-                        {/* Left: Name */}
-                        <div className="flex-shrink-0 flex items-center">
-                            <Link to="/" className="text-3xl font-extrabold text-indigo-600 tracking-tight hover:text-indigo-700 transition">
-                                DealDrop
-                            </Link>
-                        </div>
-                        
-                        {/* Middle: Search */}
-                        <div className="flex-1 flex justify-center px-4 md:px-8 hidden md:flex">
-                            <div className="w-full max-w-lg">
-                                <div className="relative group">
+        <div className="min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,_#f8fbff_0%,_#eef4ff_40%,_#f8fafc_100%)] text-slate-900 selection:bg-sky-100 selection:text-sky-900">
+            <nav className="sticky top-0 z-50 border-b border-white/60 bg-white/80 backdrop-blur-xl">
+                <div className="w-full px-4 sm:px-6 lg:px-10">
+                    <div className="flex min-h-20 items-center justify-between gap-4">
+                        <Link
+                            to="/"
+                            className="text-3xl font-black tracking-tight text-slate-900 transition hover:text-sky-600"
+                        >
+                            DealDrop
+                        </Link>
+
+                        <div className="hidden flex-1 justify-center px-4 md:flex md:px-8">
+                            <div className="w-full max-w-xl">
+                                <div className="group relative">
                                     <input
                                         type="text"
                                         placeholder="Search live auctions..."
-                                        className="w-full pl-5 pr-12 py-2.5 rounded-full border-2 border-gray-100 bg-gray-50 focus:bg-white focus:outline-none focus:border-indigo-500 shadow-sm transition-all duration-300"
+                                        className="w-full rounded-full border border-slate-200 bg-slate-50 px-5 py-3 pr-12 shadow-sm outline-none transition focus:border-sky-400 focus:bg-white"
                                     />
-                                    <button className="absolute right-0 top-0 mt-2.5 mr-4 text-gray-400 group-hover:text-indigo-600 transition-colors">
-                                        <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <button className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-hover:text-sky-600">
+                                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                         </svg>
                                     </button>
@@ -63,27 +61,36 @@ function Home() {
                             </div>
                         </div>
 
-                        {/* Right: Auth */}
-                        <div className="flex items-center space-x-6">
+                        <div className="flex items-center gap-4 sm:gap-6">
                             {user ? (
                                 <>
-                                    <div className="flex flex-col text-right hidden sm:flex">
-                                        <span className="text-xs text-gray-500 font-medium">Welcome back,</span>
-                                        <span className="text-gray-900 font-bold capitalize">{user.username}</span>
+                                    <div className="hidden text-right sm:flex sm:flex-col">
+                                        <span className="text-xs font-medium text-slate-500">
+                                            Welcome back,
+                                        </span>
+                                        <span className="font-bold capitalize text-slate-900">
+                                            {user.username}
+                                        </span>
                                     </div>
                                     <button
                                         onClick={logout}
-                                        className="px-5 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 font-semibold transition-colors duration-300"
+                                        className="rounded-2xl bg-rose-50 px-5 py-2.5 font-semibold text-rose-600 transition hover:bg-rose-100"
                                     >
                                         Logout
                                     </button>
                                 </>
                             ) : (
                                 <>
-                                    <Link to="/login" className="text-gray-600 hover:text-indigo-600 font-semibold transition-colors">
+                                    <Link
+                                        to="/login"
+                                        className="font-semibold text-slate-600 transition hover:text-sky-600"
+                                    >
                                         Login
                                     </Link>
-                                    <Link to="/register" className="px-6 py-2.5 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-lg hover:-translate-y-0.5 transform font-semibold transition-all duration-300">
+                                    <Link
+                                        to="/register"
+                                        className="rounded-full bg-slate-900 px-6 py-2.5 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-sky-600 hover:shadow-lg"
+                                    >
                                         Sign up
                                     </Link>
                                 </>
@@ -93,117 +100,166 @@ function Home() {
                 </div>
             </nav>
 
-            <main className="flex-grow">
-                {/* Horizontal Image Banner */}
-                <section className="relative w-full h-80 md:h-[28rem] bg-gray-900 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-900/90 to-black/60 z-10" />
+            <main>
+                <section className="relative isolate overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.18),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(99,102,241,0.16),_transparent_28%)]" />
+                    <div className="absolute inset-0 bg-slate-950/55" />
                     <img
-                        src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1600&q=80"
+                        src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=80"
                         alt="Auction Banner"
-                        className="absolute inset-0 w-full h-full object-cover"
+                        className="absolute inset-0 h-full w-full object-cover"
                     />
-                    <div className="relative z-20 h-full flex flex-col justify-center items-center text-center px-4 max-w-4xl mx-auto">
-                        <span className="px-4 py-1.5 rounded-full bg-white/20 text-white backdrop-blur-md border border-white/30 text-xs font-bold tracking-wider uppercase mb-6 shadow-sm">
-                            Premium Auctions Daily
-                        </span>
-                        <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-4 drop-shadow-lg leading-tight">
-                            Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Incredible Deals</span>
-                        </h1>
-                        <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl drop-shadow-md font-light">
-                            Bid on exclusive items, transparently and securely.
-                        </p>
-                    </div>
-                </section>
 
-                {/* 3 Sections Top Text Area */}
-                <section className="bg-white py-12 md:py-16 border-b border-gray-100">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {/* Left Section */}
-                            <div className="text-center p-6 rounded-2xl bg-indigo-50/50 hover:bg-indigo-50 transition-colors">
-                                <div className="w-14 h-14 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-600">
-                                    <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">Exclusive Items</h3>
-                                <p className="text-gray-600 text-sm">Find rare collections and unique items you simply won't find anywhere else.</p>
-                            </div>
-                            
-                            {/* Mid Section */}
-                            <div className="text-center p-6 rounded-2xl bg-cyan-50/50 hover:bg-cyan-50 transition-colors">
-                                <div className="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4 text-cyan-600">
-                                    <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">Secure Bidding</h3>
-                                <p className="text-gray-600 text-sm">A fully transparent process designed to keep your funds and data safe.</p>
-                            </div>
+                    <div className="relative mx-auto flex min-h-[34rem] w-full max-w-7xl items-center px-4 py-20 sm:px-6 lg:px-8">
+                        <div className="max-w-3xl">
+                            <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.35em] text-white backdrop-blur-md">
+                                Premium Auctions Daily
+                            </span>
+                            <h1 className="mt-6 text-4xl font-black tracking-tight text-white md:text-6xl md:leading-[1.05]">
+                                Discover
+                                <span className="block bg-gradient-to-r from-sky-300 via-cyan-300 to-indigo-300 bg-clip-text text-transparent">
+                                    Incredible Deals
+                                </span>
+                            </h1>
+                            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
+                                Bid on exclusive items with a faster, cleaner,
+                                and more transparent experience built for modern
+                                online auctions.
+                            </p>
 
-                            {/* Right Section */}
-                            <div className="text-center p-6 rounded-2xl bg-teal-50/50 hover:bg-teal-50 transition-colors">
-                                <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 text-teal-600">
-                                    <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                    </svg>
-                                </div>
-                                <h3 className="text-xl font-bold mb-2">Fast Delivery</h3>
-                                <p className="text-gray-600 text-sm">Win your auction and get your item delivered quickly to your doorstep.</p>
+                            <div className="mt-8 flex flex-wrap gap-4">
+                                <Link
+                                    to={user ? "/dashboard/auctions" : "/register"}
+                                    className="rounded-full bg-white px-6 py-3 font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-sky-100"
+                                >
+                                    Explore Auctions
+                                </Link>
+                                {user?.role === "seller" && (
+                                    <button
+                                        onClick={() => navigate("/create-auction")}
+                                        className="rounded-full border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
+                                    >
+                                        Create Auction
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Upcoming Auctions Section */}
-                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                    <div className="flex justify-between items-end mb-8 border-b border-gray-100 pb-4">
+                <section className="w-full px-4 py-16 sm:px-6 lg:px-10">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                        <div className="rounded-[2rem] border border-indigo-100 bg-white/85 p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] transition hover:-translate-y-1">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600">
+                                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                                </svg>
+                            </div>
+                            <h3 className="mt-6 text-2xl font-bold text-slate-900">
+                                Exclusive Items
+                            </h3>
+                            <p className="mt-3 text-sm leading-7 text-slate-600">
+                                Find rare collections and unique items you simply
+                                will not find anywhere else.
+                            </p>
+                        </div>
+
+                        <div className="rounded-[2rem] border border-cyan-100 bg-white/85 p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] transition hover:-translate-y-1">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-100 text-cyan-600">
+                                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <h3 className="mt-6 text-2xl font-bold text-slate-900">
+                                Secure Bidding
+                            </h3>
+                            <p className="mt-3 text-sm leading-7 text-slate-600">
+                                A transparent auction flow designed to keep your
+                                bids, account, and data safe.
+                            </p>
+                        </div>
+
+                        <div className="rounded-[2rem] border border-emerald-100 bg-white/85 p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] transition hover:-translate-y-1">
+                            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
+                                <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <h3 className="mt-6 text-2xl font-bold text-slate-900">
+                                Fast Delivery
+                            </h3>
+                            <p className="mt-3 text-sm leading-7 text-slate-600">
+                                Win your auction and move quickly from bidding
+                                to delivery with less friction.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="w-full px-4 py-8 sm:px-6 lg:px-10 lg:py-12">
+                    <div className="mb-10 flex flex-col gap-5 border-b border-slate-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <span className="text-indigo-600 font-bold tracking-wider uppercase text-xs">Live Now</span>
-                            <h2 className="text-3xl font-extrabold text-gray-900 mt-1">Upcoming Auctions</h2>
+                            <span className="text-xs font-bold uppercase tracking-[0.35em] text-sky-500">
+                                Live Now
+                            </span>
+                            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">
+                                Upcoming Auctions
+                            </h2>
                         </div>
-                        <button className="text-indigo-600 hover:text-indigo-800 font-bold text-sm hidden sm:block pb-1">
+                        <button className="hidden text-sm font-bold text-sky-600 transition hover:text-sky-800 sm:block">
                             View All &rarr;
                         </button>
                     </div>
 
                     {auctions.length === 0 ? (
-                        <div className="bg-white rounded-2xl p-12 text-center border border-gray-100 shadow-sm">
-                            <svg className="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div className="rounded-[2rem] border border-slate-200 bg-white/85 p-12 text-center shadow-[0_16px_50px_rgba(15,23,42,0.05)]">
+                            <svg className="mx-auto mb-4 h-12 w-12 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                             </svg>
-                            <h3 className="text-xl font-bold text-gray-900">No auctions available</h3>
-                            <p className="text-gray-500 mt-2">Check back later for exciting new deals.</p>
+                            <h3 className="text-xl font-bold text-slate-900">
+                                No auctions available
+                            </h3>
+                            <p className="mt-2 text-slate-500">
+                                Check back later for exciting new deals.
+                            </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
                             {auctions.map((auction) => (
-                                <div 
-                                    key={auction._id} 
-                                    onClick={() => navigate(`/auction/${auction._id}`)} 
-                                    className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer flex flex-col group border border-gray-100 transform hover:-translate-y-1"
+                                <div
+                                    key={auction._id}
+                                    onClick={() => navigate(`/auction/${auction._id}`)}
+                                    className="group flex cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_16px_50px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-1.5 hover:border-sky-200 hover:shadow-[0_24px_60px_rgba(14,165,233,0.12)]"
                                 >
-                                    <div className="h-48 bg-gray-100 relative overflow-hidden">
-                                        <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase shadow-sm z-10 flex items-center">
-                                            <span className="w-1.5 h-1.5 bg-white rounded-full mr-1.5 animate-pulse"></span>
+                                    <div className="relative h-52 overflow-hidden bg-slate-100">
+                                        <div className="absolute left-4 top-4 z-10 flex items-center rounded-full bg-rose-500 px-3 py-1 text-[10px] font-bold uppercase text-white shadow-sm">
+                                            <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-white animate-pulse"></span>
                                             {auction.status || "Live"}
                                         </div>
-                                        <img 
-                                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(auction.title)}&background=random&size=400`} 
+                                        <img
+                                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(auction.title)}&background=random&size=400`}
                                             alt={auction.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                         />
                                     </div>
-                                    <div className="p-5 flex-grow flex flex-col">
-                                        <h3 className="text-lg font-bold text-gray-900 mb-1 truncate group-hover:text-indigo-600 transition-colors">{auction.title}</h3>
-                                        <p className="text-gray-500 text-sm line-clamp-2 mb-4 flex-grow">{auction.description}</p>
-                                        
-                                        <div className="flex justify-between items-end mt-auto pt-3 border-t border-gray-50">
+                                    <div className="flex flex-1 flex-col p-5">
+                                        <h3 className="truncate text-lg font-bold text-slate-900 transition-colors group-hover:text-sky-600">
+                                            {auction.title}
+                                        </h3>
+                                        <p className="mt-2 line-clamp-2 flex-grow text-sm text-slate-500">
+                                            {auction.description}
+                                        </p>
+
+                                        <div className="mt-5 flex items-end justify-between border-t border-slate-100 pt-4">
                                             <div>
-                                                <span className="block text-[10px] text-gray-400 font-bold uppercase mb-0.5">Current Bid</span>
-                                                <span className="text-xl font-black text-indigo-600">₹{auction.currentPrice}</span>
+                                                <span className="block text-[10px] font-bold uppercase text-slate-400">
+                                                    Current Bid
+                                                </span>
+                                                <span className="text-xl font-black text-sky-600">
+                                                    â‚¹{auction.currentPrice}
+                                                </span>
                                             </div>
-                                            <div className="bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg font-bold text-xs group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                                            <div className="rounded-xl bg-sky-50 px-4 py-2 text-xs font-bold text-sky-600 transition-colors duration-300 group-hover:bg-sky-600 group-hover:text-white">
                                                 Bid Now
                                             </div>
                                         </div>
@@ -212,47 +268,62 @@ function Home() {
                             ))}
                         </div>
                     )}
-                    <div>
-                        <button onClick={requestSeller}> Want to become seller
+
+                    <div className="mt-10 flex flex-wrap gap-4">
+                        <button
+                            onClick={requestSeller}
+                            className="rounded-2xl bg-slate-900 px-5 py-3 font-semibold text-white transition hover:bg-sky-600"
+                        >
+                            Want to become seller
                         </button>
                         {user?.role === "seller" && (
-    <button onClick={() => navigate("/create-auction")}>
-        Create Auction
-    </button>
-)}
+                            <button
+                                onClick={() => navigate("/create-auction")}
+                                className="rounded-2xl border border-slate-200 bg-white px-5 py-3 font-semibold text-slate-900 transition hover:border-sky-200 hover:text-sky-600"
+                            >
+                                Create Auction
+                            </button>
+                        )}
                     </div>
                 </section>
             </main>
 
-            {/* Footer */}
-            <footer className="bg-gray-900 text-gray-300 py-12 mt-auto">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <footer className="mt-auto bg-slate-950 text-slate-300">
+                <div className="w-full px-4 py-14 sm:px-6 lg:px-10">
+                    <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
                         <div>
-                            <h3 className="text-2xl font-extrabold text-white mb-4 tracking-tight"><span className="text-indigo-500">Deal</span>Drop</h3>
-                            <p className="text-gray-400 text-sm max-w-sm leading-relaxed mb-4">
-                                Your premier destination for exclusive auctions, antique collections, and everyday deals.
+                            <h3 className="text-2xl font-black tracking-tight text-white">
+                                <span className="text-sky-400">Deal</span>Drop
+                            </h3>
+                            <p className="mt-4 max-w-sm text-sm leading-7 text-slate-400">
+                                Your destination for exclusive auctions,
+                                collectible finds, and everyday deals with a
+                                cleaner bidding experience.
                             </p>
                         </div>
                         <div>
-                            <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Quick Links</h4>
-                            <ul className="space-y-2 text-sm">
-                                <li><Link to="/" className="hover:text-indigo-400 transition-colors">Home</Link></li>
-                                <li><a href="#" className="hover:text-indigo-400 transition-colors">Live Auctions</a></li>
-                                <li><a href="#" className="hover:text-indigo-400 transition-colors">How it Works</a></li>
+                            <h4 className="mb-4 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                                Quick Links
+                            </h4>
+                            <ul className="space-y-3 text-sm">
+                                <li><Link to="/" className="transition hover:text-sky-400">Home</Link></li>
+                                <li><a href="#" className="transition hover:text-sky-400">Live Auctions</a></li>
+                                <li><a href="#" className="transition hover:text-sky-400">How it Works</a></li>
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Contact Us</h4>
-                            <ul className="space-y-2 text-sm text-gray-400">
+                            <h4 className="mb-4 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                                Contact Us
+                            </h4>
+                            <ul className="space-y-3 text-sm text-slate-400">
                                 <li className="flex items-center">
-                                    <svg className="w-4 h-4 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg className="mr-2 h-4 w-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
                                     support@dealdrop.com
                                 </li>
                                 <li className="flex items-center">
-                                    <svg className="w-4 h-4 mr-2 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg className="mr-2 h-4 w-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                                     </svg>
                                     +1 (800) DEAL-DRP
@@ -260,8 +331,8 @@ function Home() {
                             </ul>
                         </div>
                     </div>
-                    <div className="border-t border-gray-800 pt-6 flex justify-between items-center text-xs text-gray-500">
-                        <p>© {new Date().getFullYear()} DealDrop Inc. All rights reserved.</p>
+                    <div className="mt-10 border-t border-slate-800 pt-6 text-xs text-slate-500">
+                        <p>Â© {new Date().getFullYear()} DealDrop Inc. All rights reserved.</p>
                     </div>
                 </div>
             </footer>

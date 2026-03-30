@@ -21,26 +21,35 @@ function DashboardAuctions() {
         }
     }
 
-    // 🔍 Filter logic
+    // ðŸ” Filter logic
     const filteredAuctions =
         filter === "ALL" ? auctions : auctions.filter((a) => a.status === filter);
 
     return (
-        <div>
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Auctions</h2>
+        <section className="space-y-8">
+            <div className="flex flex-col gap-5 rounded-[2rem] border border-slate-200 bg-white/80 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.35em] text-sky-500">
+                        Marketplace
+                    </p>
+                    <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-900">
+                        Auctions
+                    </h2>
+                    <p className="mt-2 max-w-2xl text-sm text-slate-500">
+                        Explore live, upcoming, and completed listings through a
+                        cleaner bidding dashboard.
+                    </p>
+                </div>
 
-                {/* Filters */}
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                     {["ALL", "LIVE", "UPCOMING", "ENDED"].map((f) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
-                            className={`px-3 py-1 rounded ${
+                            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                                 filter === f
-                                    ? "bg-indigo-600 text-white"
-                                    : "bg-gray-200"
+                                    ? "bg-slate-900 text-white shadow-lg shadow-slate-900/20"
+                                    : "border border-slate-200 bg-slate-50 text-slate-600 hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
                             }`}
                         >
                             {f}
@@ -49,47 +58,68 @@ function DashboardAuctions() {
                 </div>
             </div>
 
-            {/* Grid */}
             {filteredAuctions.length === 0 ? (
-                <p>No auctions found</p>
+                <div className="rounded-[2rem] border border-dashed border-slate-300 bg-white/70 px-6 py-14 text-center shadow-sm">
+                    <p className="text-lg font-semibold text-slate-800">
+                        No auctions found
+                    </p>
+                    <p className="mt-2 text-sm text-slate-500">
+                        Try another filter or check back when new auctions go
+                        live.
+                    </p>
+                </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
                     {filteredAuctions.map((auction) => (
                         <div
                             key={auction._id}
                             onClick={() =>
                                 navigate(`/auction/${auction._id}`)
                             }
-                            className="bg-white rounded-xl shadow hover:shadow-lg cursor-pointer transition p-4"
+                            className="group cursor-pointer overflow-hidden rounded-[2rem] border border-slate-200 bg-white/85 p-5 shadow-[0_16px_50px_rgba(15,23,42,0.07)] transition duration-300 hover:-translate-y-1.5 hover:border-sky-200 hover:shadow-[0_24px_60px_rgba(14,165,233,0.14)]"
                         >
-                            <h3 className="font-bold text-lg mb-2">
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 px-3 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-white shadow-lg shadow-sky-500/20">
+                                    Auction
+                                </div>
+                                <span className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                                    auction.status === "LIVE"
+                                        ? "bg-emerald-100 text-emerald-700"
+                                        : auction.status === "UPCOMING"
+                                        ? "bg-amber-100 text-amber-700"
+                                        : "bg-slate-200 text-slate-700"
+                                }`}>
+                                    {auction.status}
+                                </span>
+                            </div>
+
+                            <h3 className="mt-5 text-xl font-bold tracking-tight text-slate-900 transition group-hover:text-sky-700">
                                 {auction.title}
                             </h3>
 
-                            <p className="text-sm text-gray-500 mb-3 line-clamp-2">
+                            <p className="mt-3 line-clamp-3 text-sm leading-6 text-slate-500">
                                 {auction.description}
                             </p>
 
-                            <div className="flex justify-between items-center">
-                                <span className="text-indigo-600 font-bold">
-                                    ₹{auction.currentPrice}
-                                </span>
+                            <div className="mt-6 flex items-end justify-between">
+                                <div>
+                                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
+                                        Current Bid
+                                    </p>
+                                    <span className="mt-2 block text-2xl font-black text-slate-900">
+                                        â‚¹{auction.currentPrice}
+                                    </span>
+                                </div>
 
-                                <span className={`text-xs px-2 py-1 rounded ${
-                                    auction.status === "LIVE"
-                                        ? "bg-green-100 text-green-600"
-                                        : auction.status === "UPCOMING"
-                                        ? "bg-yellow-100 text-yellow-600"
-                                        : "bg-gray-200 text-gray-600"
-                                }`}>
-                                    {auction.status}
+                                <span className="text-sm font-semibold text-sky-600 transition group-hover:translate-x-1">
+                                    View details
                                 </span>
                             </div>
                         </div>
                     ))}
                 </div>
             )}
-        </div>
+        </section>
     );
 }
 

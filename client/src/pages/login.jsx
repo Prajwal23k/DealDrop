@@ -18,7 +18,7 @@ function Login() {
         try {
             const res = await API.post("/login", { email, password });
             login(res.data);
-            if (res.data.role === "admin") { navigate("/admin") } else { navigate("/") };
+            if (res.data.role === "admin") { navigate("/admin") } else { navigate("/dashboard") };
         } catch (err) {
             console.error(err);
             setError(err.response?.data?.message || "Login failed. Please verify your credentials.");
