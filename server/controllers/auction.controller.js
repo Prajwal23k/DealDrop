@@ -1,53 +1,65 @@
 import {Auction} from "../models/auction.js";
+import { cloudinary } from "../config/cloudinary.js";
 
-async function createAuction(req,res)
-{
-    try{
-        const title = req.body.title;
-        const description = req.body.description;
-        const startingPrice = req.body.startingPrice;
-        const startTime = req.body.startTime;
-        const endTime = req.body.endTime;
+async function createAuction(req, res) {
+    try {
+        const { title, description, startingPrice, startTime, endTime } = req.body;
 
         const start = new Date(startTime);
         const end = new Date(endTime);
         const now = new Date();
 
-        if(!title || !startingPrice || !startTime || !endTime)
-        {
-            return res.status(400).json({message : "All fields are required"});
+        if (!title || !startingPrice || !startTime || !endTime) {
+            return res.status(400).json({ message: "All fields are required" });
         }
 
-        if(start <= now)
-        {
-            return res.status(400).json({message : "Enter Valid Start Date"});
+        if (!req.file) {
+            return res.status(400).json({ message: "Image is required" });
         }
 
-        if(end <= start)
-        {
-            return res.status(400).json({message : "Enter Valid End Date"});
+        if (start <= now) {
+            return res.status(400).json({ message: "Enter Valid Start Date" });
         }
 
-        const auction = await Auction.create(
-            {
-                title : title,
-                description : description,
-                startingPrice : startingPrice,
-                startTime : startTime,
-                endTime : endTime,
-                sellerId : req.user.userId
-            }
-        );
+        if (end <= start) {
+            return res.status(400).json({ message: "Enter Valid End Date" });
+        }
+
+        // 🔥 Wrap cloudinary upload in promise
+        const uploadImage = () => {
+            return new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream(
+                    { folder: "auctions" },
+                    (error, result) => {
+                        if (error) return reject(error);
+                        resolve(result);
+                    }
+                );
+
+                stream.end(req.file.buffer);
+            });
+        };
+
+        const uploadResult = await uploadImage();
+
+        const auction = await Auction.create({
+            title,
+            description,
+            startingPrice,
+            startTime,
+            endTime,
+            sellerId: req.user.userId,
+            image: uploadResult.secure_url
+        });
 
         return res.status(201).json({
-            message : "Auction Created Successfully",
-            auctionId : auction._id,
-            status : auction.status
+            message: "Auction Created Successfully",
+            auction
         });
-    }catch(e)
-    {
-        console.error("Create auction failed : ",e.message);
-        return res.status(500).json({message : "Internal Server Error"});
+
+    } catch (e) {
+        console.error("Create auction failed:", e.message);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
 

@@ -43,42 +43,45 @@ async function register(req, res) {
 async function login(req, res) {
     const email = req.body.email;
     const password = req.body.password;
+    try {
+        if (!email || !password) {
+            return res.status(400).json({ message: " All fields are required !!" });
+        }
 
-    if (!email || !password) {
-        return res.status(400).json({ message: " All fields are required !!" });
-    }
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: "Email does not exists" });
+        }
 
-    const user = await User.findOne({ email });
-    if (!user) {
-        return res.status(401).json({ message: "Email does not exists" });
-    }
+        if (user.isBlocked) {
+            return res.status(403).json({ message: "User is blocked by admin" });
+        }
 
-    if (user.isBlocked) {
-        return res.status(403).json({ message: "User is blocked by admin" });
-    }
+        const isSame = await bcrypt.compare(password, user.password);
+        if (!isSame) {
+            return res.status(401).json({ message: "Invalid Password" });
+        }
 
-    const isSame = await bcrypt.compare(password, user.password);
-    if (!isSame) {
-        return res.status(401).json({ message: "Invalid Password" });
-    }
+        const token = jwt.sign(
+            {
+                userId: user._id,
+                role: user.role
+            },
+            process.env.JWT_SECRET_KEY,
+            {
+                expiresIn: "1d"
+            }
 
-    const token = jwt.sign(
-        {
+        );
+        return res.status(200).json({
+            message: "Login Successful !!",
+            token,
             userId: user._id,
             role: user.role
-        },
-        process.env.JWT_SECRET_KEY,
-        {
-            expiresIn: "1d"
-        }
-    );
-
-    return res.status(200).json({
-        message: "Login Successful !!",
-        token,
-        userId: user._id,
-        role: user.role
-    })
+        })
+    } catch (e) {
+        console.log(e.message);
+    }
 }
 
 async function upgradeToSeller(req, res) {
@@ -148,7 +151,7 @@ async function approveSeller(req, res) {
             },
             { new: true }
         );
-        
+
         res.status(200).json({
             message: "User approved as seller"
         });
@@ -158,14 +161,12 @@ async function approveSeller(req, res) {
     }
 }
 
-async function getMe(req,res)
-{
-    try{
+async function getMe(req, res) {
+    try {
         const user = await User.findById(req.user.userId).select("-password");
         res.status(200).json(user);
-    }catch(e)
-    {
-        res.status(500).json({ message : "Failed to fetch User"});
+    } catch (e) {
+        res.status(500).json({ message: "Failed to fetch User" });
     }
 }
 

@@ -21,13 +21,11 @@ function Home() {
         }
     }
 
-    async function requestSeller()
-    {
-        try{
+    async function requestSeller() {
+        try {
             const res = await API.post("/request-seller");
             alert(res.data.message);
-        }catch(e)
-        {
+        } catch (e) {
             alert(e.response?.data?.message);
         }
     }
@@ -231,15 +229,16 @@ function Home() {
                                     onClick={() => navigate(`/auction/${auction._id}`)}
                                     className="group flex cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white/90 shadow-[0_16px_50px_rgba(15,23,42,0.05)] transition duration-300 hover:-translate-y-1.5 hover:border-sky-200 hover:shadow-[0_24px_60px_rgba(14,165,233,0.12)]"
                                 >
-                                    <div className="relative h-52 overflow-hidden bg-slate-100">
-                                        <div className="absolute left-4 top-4 z-10 flex items-center rounded-full bg-rose-500 px-3 py-1 text-[10px] font-bold uppercase text-white shadow-sm">
-                                            <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-white animate-pulse"></span>
+                                    <div className="relative h-60 overflow-hidden">
+                                        <div className="absolute left-4 top-4 z-10 flex items-center rounded-full bg-slate-900/80 backdrop-blur-md border border-white/20 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-lg">
+                                            <span className={`mr-2 h-2 w-2 rounded-full ${auction.status === "ENDED" ? "bg-slate-500" : "bg-rose-500 animate-pulse"}`}></span>
                                             {auction.status || "Live"}
                                         </div>
+                                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-slate-900/50 to-transparent z-[5]"></div>
                                         <img
-                                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(auction.title)}&background=random&size=400`}
+                                            src={auction.image}
                                             alt={auction.title}
-                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                                         />
                                     </div>
                                     <div className="flex flex-1 flex-col p-5">

@@ -55,6 +55,10 @@ const auctionSchema = mongoose.Schema(
         isBlocked : {
             type : Boolean,
             default : false
+        },
+        image : {
+            type : String,
+            required : true
         }
     },
     {
