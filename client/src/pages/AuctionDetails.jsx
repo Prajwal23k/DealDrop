@@ -1,17 +1,20 @@
 import { API } from "../api/axios";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext.jsx";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { socket } from "../socket/socket";
 
 function AuctionDetails() {
     const { id } = useParams();
-
+    const { user } = useContext(AuthContext);
     const [currentPrice, setCurrentPrice] = useState(0);
     const [bidAmount, setBidAmount] = useState("");
     const [rules, setRules] = useState(null);
     const [bids, setBids] = useState([]);
     const [auctionData, setAuctionData] = useState(null);
     const [isSocketConnected, setIsSocketConnected] = useState(false);
+    const [paying, setPaying] = useState(false);
 
     useEffect(() => {
         fetchAuction();
@@ -28,15 +31,21 @@ function AuctionDetails() {
         socket.off("bid-update").on("bid-update", (data) => {
             if (data.auctionId === id) {
                 setCurrentPrice(data.currentPrice);
-                setBids((prev) => [
-                    {
-                        _id: Date.now().toString(), // temporary id for new socket bid
-                        amount: data.currentPrice,
-                        bidderId: { name: "Someone (Live)" },
-                        createdAt: new Date().toISOString()
-                    },
-                    ...prev
-                ]);
+
+                const newBid = {
+                    _id: Date.now().toString(),
+                    amount: data.currentPrice,
+                    bidderId: { name: "Someone (Live)" },
+                    createdAt: new Date().toISOString()
+                };
+
+                setBids((prev) => {
+                    // 🔥 prevent duplicate same price entries
+                    if (prev.some(b => b.amount === data.currentPrice)) {
+                        return prev;
+                    }
+                    return [newBid, ...prev];
+                });
             }
         });
 
@@ -55,12 +64,15 @@ function AuctionDetails() {
             socket.off("bid-rules");
             socket.off("bid-error");
             socket.off("connect");
+            socket.disconnect();
         };
     }, [id]);
 
     function handleBid(e) {
         e.preventDefault();
-        if (!bidAmount) return alert("Enter bid amount");
+        if (!bidAmount || Number(bidAmount) <= 0) {
+            return alert("Invalid bid");
+        }
 
         socket.emit("place-bid", {
             auctionId: id,
@@ -88,6 +100,52 @@ function AuctionDetails() {
         }
     }
 
+    async function handlePayment() {
+        try {
+            setPaying(true);
+            console.log("PAY CLICKED");
+
+            const res = await API.post("/create-order", {
+                auctionId: id
+            });
+
+            console.log("ORDER:", res.data);
+
+            const options = {
+                key: "rzp_test_Sd8GYtb4F1KUFZ", // 🔥 replace
+                amount: res.data.amount,
+                currency: "INR",
+                name: "DealDrop",
+                description: "Auction Payment",
+                order_id: res.data.id,
+
+                handler: async function (response) {
+                    await API.post("/verify-payment", {
+                        ...response,
+                        auctionId: id
+                    });
+
+
+                    await fetchAuction();
+
+                    setPaying(false);
+                    alert("Payment Successful 🎉");
+                }
+            };
+
+            if (!window.Razorpay) {
+                alert("Razorpay not loaded ❌");
+                return;
+            }
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+
+        } catch (e) {
+            console.error("PAY ERROR:", e);
+            alert("Payment failed");
+        }
+    }
     if (!auctionData) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -123,15 +181,37 @@ function AuctionDetails() {
                         {/* Image Placeholder */}
                         <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-100 ring-1 ring-slate-200/50 shadow-2xl shadow-indigo-100/50 w-full min-h-[400px] sm:min-h-[500px]">
                             <div className="absolute top-6 left-6 z-10 flex items-center rounded-full bg-white/90 backdrop-blur-md px-5 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-slate-800 shadow-xl border border-white/60">
-                                {auctionData.status === "ENDED" ? (
-                                    <><span className="mr-3 h-2 w-2 rounded-full bg-slate-400"></span>Ended</>
-                                ) : (
-                                    <><span className="mr-3 h-2 w-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.6)]"></span>Live Auction</>
+                                {auctionData?.status === "UPCOMING" && (
+                                    <>
+                                        <span className="mr-3 h-2 w-2 rounded-full bg-yellow-400"></span>
+                                        Upcoming
+                                    </>
+                                )}
+
+                                {auctionData?.status === "LIVE" && (
+                                    <>
+                                        <span className="mr-3 h-2 w-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.6)]"></span>
+                                        Live Auction
+                                    </>
+                                )}
+
+                                {auctionData?.status === "ENDED" && (
+                                    <>
+                                        <span className="mr-3 h-2 w-2 rounded-full bg-slate-400"></span>
+                                        Ended
+                                    </>
+                                )}
+
+                                {auctionData?.status === "PAID" && (
+                                    <>
+                                        <span className="mr-3 h-2 w-2 rounded-full bg-green-500"></span>
+                                        Paid
+                                    </>
                                 )}
                             </div>
                             <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-slate-900/20 to-transparent z-[5]"></div>
                             <img
-                                src={auctionData?.image}
+                                src={auctionData?.image || "https://via.placeholder.com/500"}
                                 alt="auction"
                                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-[1.03]"
                             />
@@ -184,51 +264,66 @@ function AuctionDetails() {
                                 </div>
 
                                 <div className="p-6">
-                                    {auctionData.status === "ENDED" ? (
-                                        <div className="bg-green-50 rounded-2xl p-5 border border-green-200 text-center">
-                                            <h3 className="text-xl font-bold text-green-800 mb-2 flex items-center justify-center">
-                                                <svg className="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4C11.955 8.944 14.5 12 18 12C20.5 12 21.5 15.5 21.5 18C21.5 20.5 18.5 22 15.5 22H6.5C3.5 22 2.5 18.5 2.5 15.5C2.5 12.5 5 10.5 7.5 10.5C9 10.5 11 11.5 11 11.5" />
-                                                </svg>
-                                                Auction Ended
-                                            </h3>
-
-                                            {auctionData.winnerId ? (
-                                                <div className="mt-4 pt-4 border-t border-green-200/50">
-                                                    <p className="text-sm text-green-700 uppercase tracking-wider font-bold mb-1">Winning Bidder</p>
-                                                    <p className="text-lg font-extrabold text-green-900 capitalize">{auctionData.winnerId.name || "Anonymous user"}</p>
-                                                    <p className="text-sm text-green-800 mt-2 bg-green-200/50 py-1.5 px-3 rounded-lg inline-block font-medium">Final Price: ₹{auctionData.currentPrice}</p>
-                                                </div>
-                                            ) : (
-                                                <p className="mt-2 text-green-700 font-medium pb-2">No valid bids were placed.</p>
-                                            )}
-                                        </div>
-                                    ) : (
+                                    {auctionData?.status === "LIVE" && (
                                         <form onSubmit={handleBid} className="space-y-4">
                                             <div>
-                                                <label htmlFor="bid" className="block text-sm font-bold text-gray-700 mb-2">Your Bid (₹)</label>
-                                                <div className="relative">
-                                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                        <span className="text-gray-500 font-bold sm:text-lg">₹</span>
-                                                    </div>
-                                                    <input
-                                                        type="number"
-                                                        id="bid"
-                                                        placeholder={`Min: ₹${currentPrice + (rules?.divisibleBy || 1)}`}
-                                                        value={bidAmount}
-                                                        onChange={(e) => setBidAmount(e.target.value)}
-                                                        className="block w-full pl-9 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-lg font-bold text-gray-900 focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 transition-colors"
-                                                        required
-                                                    />
-                                                </div>
+                                                <label className="block text-sm font-bold text-gray-700 mb-2">
+                                                    Your Bid (₹)
+                                                </label>
+
+                                                <input
+                                                    type="number"
+                                                    placeholder={`Min: ₹${currentPrice + (rules?.divisibleBy || 1)}`}
+                                                    value={bidAmount}
+                                                    onChange={(e) => setBidAmount(e.target.value)}
+                                                    className="block w-full pl-4 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl"
+                                                    required
+                                                />
                                             </div>
+
                                             <button
                                                 type="submit"
-                                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-lg py-4 px-6 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 flex justify-center items-center"
+                                                className="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl"
                                             >
                                                 Place Bid Now
                                             </button>
                                         </form>
+                                    )}
+
+                                    {/* 🔥 ENDED STATE */}
+                                    {auctionData?.status === "ENDED" && (
+                                        <div className="mt-4 pt-4 border-t border-green-200/50">
+                                            <p className="text-sm text-green-700 font-bold">
+                                                Winning Bidder
+                                            </p>
+
+                                            <p className="text-lg font-bold">
+                                                {auctionData?.winnerId?.name || "Anonymous"}
+                                            </p>
+
+                                            <p className="mt-2">
+                                                Final Price: ₹{auctionData.currentPrice}
+                                            </p>
+
+                                            {/* PAY BUTTON */}
+                                            {auctionData?.winnerId?._id === user?._id && (
+                                                <button
+                                                    onClick={handlePayment}
+                                                    className="mt-4 w-full bg-green-600 text-white py-3 rounded-xl"
+                                                >
+                                                    Pay Now 💳
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* 🔥 PAID STATE */}
+                                    {auctionData?.status === "PAID" && (
+                                        <div className="mt-4 pt-4 text-center">
+                                            <p className="text-green-600 font-bold text-lg">
+                                                Payment Completed ✅
+                                            </p>
+                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -289,7 +384,6 @@ function AuctionDetails() {
 
                         </div>
                     </div>
-
                 </div>
             </main>
         </div>

@@ -9,6 +9,7 @@ import {Server} from "socket.io";
 import http from "http";
 import env from "dotenv";
 import cors from "cors";
+import { paymentRouter } from "./routes/payment.route.js";
 
 
 env.config();
@@ -33,6 +34,7 @@ startAuctionStatusCron();
 app.use("/api",authRouter);
 app.use("/api",auctionRouter);
 app.use("/api",bidRouter);
+app.use("/api",paymentRouter);
 app.get("/",(req,res)=>
 {
     res.send("Server running !!!");

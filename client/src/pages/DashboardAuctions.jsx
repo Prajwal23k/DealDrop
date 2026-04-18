@@ -42,7 +42,7 @@ function DashboardAuctions() {
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                    {["ALL", "LIVE", "UPCOMING", "ENDED"].map((f) => (
+                    {["ALL", "LIVE", "UPCOMING", "ENDED","PAID"].map((f) => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
