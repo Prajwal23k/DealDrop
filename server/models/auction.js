@@ -6,66 +6,71 @@ const auctionSchema = mongoose.Schema(
             type: String,
             required: [true, "Title is Required"]
         },
-        description : {
-            type : String
+        description: {
+            type: String
         },
         startingPrice: {
             type: Number,
             required: [true, "Staring Price is Required"],
-            min : 0
+            min: 0
         },
-        startTime : {
-            type : Date,
-            required : [true,"Start Time is Required"]
+        startTime: {
+            type: Date,
+            required: [true, "Start Time is Required"]
         },
-        endTime : {
-            type : Date,
-            required : [true,"End Time is Required"]
+        endTime: {
+            type: Date,
+            required: [true, "End Time is Required"]
         },
-        sellerId : {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : "User",
-            required : true
+        sellerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
         },
-        status : {
-            type : String,
-            enum : ["UPCOMING","LIVE","ENDED","PAID"],
-            default : "UPCOMING"
+        status: {
+            type: String,
+            enum: ["UPCOMING", "LIVE", "ENDED", "PAID"],
+            default: "UPCOMING"
         },
-        currentPrice  : {
-            type : Number,
-            default : function(){
+        currentPrice: {
+            type: Number,
+            default: function () {
                 return this.startingPrice;
             }
         },
-        bidCount : {
-            type : Number,
-            default : 0
+        bidCount: {
+            type: Number,
+            default: 0
         },
-        highestBidder : {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : "User",
-            default : null
+        highestBidder: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: null
         },
-        winnerId : {
-            type : mongoose.Schema.Types.ObjectId,
-            ref : "User",
-            default : null
+        winnerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: null
         },
-        isBlocked : {
-            type : Boolean,
-            default : false
+        isBlocked: {
+            type: Boolean,
+            default: false
         },
-        image : {
-            type : String,
-            required : true
+        image: {
+            type: String,
+            required: true
+        },
+        category: {
+            type: String,
+            required: true,
+            enum: ["Electronics", "Fashion", "Home", "Sports", "Jewellery", "Paintings", "Others"]
         }
     },
     {
-        timestamps : true
+        timestamps: true
     }
 )
 
-const Auction = mongoose.model("Auction",auctionSchema);
+const Auction = mongoose.model("Auction", auctionSchema);
 
-export {Auction};
+export { Auction };

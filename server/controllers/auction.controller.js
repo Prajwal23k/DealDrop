@@ -3,7 +3,7 @@ import { cloudinary } from "../config/cloudinary.js";
 
 async function createAuction(req, res) {
     try {
-        const { title, description, startingPrice, startTime, endTime } = req.body;
+        const { title, description, startingPrice, startTime, endTime, category } = req.body;
 
         const start = new Date(startTime);
         const end = new Date(endTime);
@@ -42,12 +42,15 @@ async function createAuction(req, res) {
 
         const uploadResult = await uploadImage();
 
+
+
         const auction = await Auction.create({
             title,
             description,
             startingPrice,
             startTime,
             endTime,
+            category,
             sellerId: req.user.userId,
             image: uploadResult.secure_url
         });

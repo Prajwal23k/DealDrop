@@ -11,6 +11,7 @@ function CreateAuction() {
         startingPrice: "",
         startTime: "",
         endTime: "",
+        category: "",
         image: null
     });
 
@@ -43,6 +44,7 @@ function CreateAuction() {
             data.append("startingPrice", form.startingPrice);
             data.append("startTime", form.startTime);
             data.append("endTime", form.endTime);
+            data.append("category", form.category);
             data.append("image", form.image);
 
             await API.post("/createAuction", data, {
@@ -87,6 +89,24 @@ function CreateAuction() {
                 className="rounded-[2rem] border border-slate-200 bg-white/90 p-8 shadow-[0_16px_50px_rgba(15,23,42,0.06)] md:p-10"
             >
                 <div className="grid gap-8 md:grid-cols-2">
+                    {/* category */}
+                    <div>
+                        <select
+                            name="category"
+                            value={form.category}
+                            onChange={(e) => setForm({ ...form, category: e.target.value })}
+                            className="w-full border rounded-xl p-3"
+                        >
+                            <option value="">Select Category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Home">Home</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Jewellery">Sports</option>
+                            <option value="Paintings">Sports</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
 
                     {/* Title */}
                     <div className="md:col-span-2">
@@ -147,7 +167,7 @@ function CreateAuction() {
                     {/* Image Upload */}
                     <div className="md:col-span-2 border-t border-slate-100 pt-8 mt-4">
                         <label className="mb-3 block text-sm font-semibold text-slate-700">Product Image</label>
-                        
+
                         <div className="flex items-center justify-center w-full">
                             <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-slate-200 border-dashed rounded-[2rem] cursor-pointer bg-slate-50 hover:bg-slate-100 hover:border-teal-400 transition-colors">
                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -155,9 +175,9 @@ function CreateAuction() {
                                     <p className="mb-2 text-sm text-slate-500"><span className="font-semibold text-teal-600">Click to upload</span> or drag and drop</p>
                                     <p className="text-xs text-slate-500">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                                 </div>
-                                <input 
-                                    type="file" 
-                                    className="hidden" 
+                                <input
+                                    type="file"
+                                    className="hidden"
                                     accept="image/*"
                                     onChange={(e) => {
                                         const file = e.target.files[0];
@@ -168,7 +188,7 @@ function CreateAuction() {
                                     }}
                                 />
                             </label>
-                        </div> 
+                        </div>
 
                         {form.image && (
                             <div className="mt-4 flex items-center bg-teal-50 text-teal-700 px-4 py-2 rounded-xl text-sm font-semibold border border-teal-100">
