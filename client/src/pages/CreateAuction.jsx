@@ -14,14 +14,15 @@ function CreateAuction() {
         category: "",
         image: null
     });
-
     const [preview, setPreview] = useState(null);
+    const [recommendation, setRecommendation] = useState(null);
 
     function handleChange(e) {
         setForm({
             ...form,
             [e.target.name]: e.target.value
         });
+        setRecommendation(null);
     }
 
     async function handleSubmit(e) {
@@ -63,6 +64,26 @@ function CreateAuction() {
         }
     }
 
+    async function getRecommendation() {
+        console.log("Calling recommendation API...");
+        if (!form.title || !form.category) return;
+
+        try {
+            console.log("Calling API with:", form.title, form.category);
+
+            const res = await API.get(
+                `/recommend-price?title=${form.title}&category=${form.category}`
+            );
+
+            console.log("Response:", res.data);
+
+            setRecommendation(res.data);
+
+        } catch (e) {
+            console.error("Recommendation error:", e);
+        }
+    }
+
     // 🔥 Cleanup preview memory
     useEffect(() => {
         return () => {
@@ -94,7 +115,7 @@ function CreateAuction() {
                         <select
                             name="category"
                             value={form.category}
-                            onChange={(e) => setForm({ ...form, category: e.target.value })}
+                            onChange={handleChange}
                             className="w-full border rounded-xl p-3"
                         >
                             <option value="">Select Category</option>
@@ -102,15 +123,15 @@ function CreateAuction() {
                             <option value="Fashion">Fashion</option>
                             <option value="Home">Home</option>
                             <option value="Sports">Sports</option>
-                            <option value="Jewellery">Sports</option>
-                            <option value="Paintings">Sports</option>
+                            <option value="Jewellery">Jewellery</option>
+                            <option value="Paintings">Paintings</option>
                             <option value="Others">Others</option>
                         </select>
                     </div>
 
                     {/* Title */}
                     <div className="md:col-span-2">
-                        <label className="mb-2 block text-sm font-semibold text-slate-700">Listing Title</label>
+                        <label className="mb-2 block text-sm font-semibold text-slate-700">Title</label>
                         <input
                             name="title"
                             onChange={handleChange}
@@ -129,6 +150,30 @@ function CreateAuction() {
                             placeholder="Describe the condition, features, and history of the item..."
                         />
                     </div>
+                    <div>
+                        <button
+                            type="button"
+                            className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-slate-900/15 transition-all duration-300 hover:scale-[1.02] hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                            onClick={getRecommendation}
+                        >
+                            Get Price Suggestion 💡
+                        </button>
+                    </div>
+
+                    <div className="mt-4">
+                        {!form.title || !form.category ? (
+                            <p className="text-gray-400">
+                                Enter title and category to get price suggestion 💡
+                            </p>
+                        ) : recommendation ? (
+                            <div className="bg-indigo-50 p-4 rounded-xl">
+                                <p>💡 Suggested Starting Price: ₹{recommendation.suggestedStartingPrice}</p>
+                                <p>📈 Expected Final Price: ₹{recommendation.expectedFinalPrice}</p>
+                            </div>
+                        ) : (
+                            <p className="text-gray-400">Click button to get suggestion</p>
+                        )}
+                    </div>
 
                     {/* Price */}
                     <div>
@@ -141,6 +186,7 @@ function CreateAuction() {
                             className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm font-black text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all"
                         />
                     </div>
+
 
                     {/* Start Time */}
                     <div>

@@ -10,6 +10,7 @@ import http from "http";
 import env from "dotenv";
 import cors from "cors";
 import { paymentRouter } from "./routes/payment.route.js";
+import { recommendRouter } from "./routes/recommendation.routes.js";
 
 
 env.config();
@@ -35,6 +36,7 @@ app.use("/api",authRouter);
 app.use("/api",auctionRouter);
 app.use("/api",bidRouter);
 app.use("/api",paymentRouter);
+app.use("/api", recommendRouter);
 app.get("/",(req,res)=>
 {
     res.send("Server running !!!");
