@@ -8,27 +8,38 @@ app = FastAPI()
 class AuctionInput(BaseModel):
     title: str
     prices: list
+    bidCounts: list
 
 @app.post("/recommend-price")
 def recommend_price(data: AuctionInput):
     prices = data.prices
+    bid_counts = data.bidCounts
 
     if len(prices) < 2:
+        avg_price = sum(prices) / len(prices) if len(prices) > 0 else 1000
         return {
-            "suggestedStartingPrice": 100,
-            "expectedFinalPrice": 500
+            "suggestedStartingPrice": int(avg_price * 0.6),
+            "expectedFinalPrice": int(avg_price)
         }
 
-    df = pd.DataFrame(prices, columns=["price"])
+    df = pd.DataFrame({
+        "bidCount" : bid_counts,
+        "price" : prices
+    })
 
-    X = df.index.values.reshape(-1, 1)
-    y = df["price"].values
+    # Features (X)
+    X = df[["bidCount"]]
+
+    # Target (y)
+    y = df["price"]
+
 
     model = LinearRegression()
     model.fit(X, y)
 
-    next_index = [[len(prices)]]
-    predicted_price = model.predict(next_index)[0]
+    avg_bid_count = int(df["bidCount"].mean())
+
+    predicted_price = model.predict([[avg_bid_count]])[0]
 
     return {
         "suggestedStartingPrice": int(predicted_price * 0.6),
