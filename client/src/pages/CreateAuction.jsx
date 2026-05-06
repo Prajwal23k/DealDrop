@@ -39,7 +39,7 @@ function CreateAuction() {
 
         try {
             const data = new FormData();
-
+            form.title = form.title.charAt(0).toUpperCase() + form.title.slice(1);
             data.append("title", form.title);
             data.append("description", form.description);
             data.append("startingPrice", form.startingPrice);
