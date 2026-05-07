@@ -1,9 +1,18 @@
+from openai import OpenAI
+from dotenv import load_dotenv
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 
 app = FastAPI()
+load_dotenv()
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=os.getenv("OPENROUTER_API_KEY")
+)
 
 class AuctionInput(BaseModel):
     title: str
@@ -45,3 +54,46 @@ def recommend_price(data: AuctionInput):
         "suggestedStartingPrice": int(predicted_price * 0.6),
         "expectedFinalPrice": int(predicted_price)
     }
+
+class DescriptionInput(BaseModel):
+    title: str
+    category: str
+
+@app.post("/generate-description")
+def generate_description(data: DescriptionInput):
+
+    try:
+
+        prompt = f"""
+        Generate a professional auction description for:
+
+        Product: {data.title}
+        Category: {data.category}
+
+        Keep it short, attractive, and suitable for an auction marketplace.
+        """
+
+        response = client.chat.completions.create(
+            model="openai/gpt-3.5-turbo",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        description = response.choices[0].message.content
+
+        return {
+            "description": description
+        }
+
+    except Exception as e:
+
+        print("AI ERROR:", e)
+
+        return {
+            "description":
+            f"This {data.title.lower()} belongs to the {data.category.lower()} category and is suitable for auction buyers."
+        }
