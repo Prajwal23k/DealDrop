@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { API } from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import Logo from "../assets/Logo.png";
+import Logo from "../assets/Logo_dark_theme.png";
 
 function Register() {
     const [form, setForm] = useState({
@@ -51,7 +51,13 @@ function Register() {
             <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.18),transparent_45%),radial-gradient(circle_at_80%_70%,rgba(56,189,248,0.18),transparent_45%)]" />
             <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-[0_0_60px_rgba(56,189,248,0.08)] backdrop-blur-xl">
                 <div className="text-center">
-                    <img src={Logo} alt="DealDrop" className="mx-auto h-14 w-auto" />
+                    <div className="flex justify-center">
+                        <img
+                            src={Logo}
+                            alt="DealDrop"
+                            className="h-14 w-14 rounded-2xl object-cover ring-1 ring-white/10 shadow-[0_0_25px_rgba(56,189,248,0.18)]"
+                        />
+                    </div>
                     <h1 className="mt-4 text-2xl font-black tracking-tight text-white">Create your account</h1>
                     <p className="mt-1 text-sm text-slate-400">Join DealDrop and start exploring live auctions.</p>
                 </div>

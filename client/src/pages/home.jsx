@@ -2,7 +2,7 @@ import { AuthContext } from "../context/authContext.jsx";
 import { useContext, useState, useEffect } from "react";
 import { API } from "../api/axios.js";
 import { useNavigate, Link } from "react-router-dom";
-import Logo from "../assets/Logo.png";
+import Logo from "../assets/Logo_dark_theme.png";
 
 function Home() {
     const navigate = useNavigate();
@@ -37,7 +37,11 @@ function Home() {
             <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
                 <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
                     <Link to="/" className="flex items-center gap-2">
-                        <img src={Logo} alt="DealDrop" className="h-10 w-auto" />
+                        <img
+                            src={Logo}
+                            alt="DealDrop"
+                            className="h-14 w-14 rounded-2xl object-cover ring-1 ring-white/10 shadow-[0_0_25px_rgba(56,189,248,0.18)]"
+                        />
                         <span className="hidden text-lg font-black tracking-tight text-white sm:block">DealDrop</span>
                     </Link>
 
@@ -76,8 +80,8 @@ function Home() {
             <section className="relative overflow-hidden">
                 <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.18),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(99,102,241,0.22),transparent_45%)]" />
                 <div className="absolute inset-0 -z-10 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_70%)]" />
-                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
-                    <div className="mx-auto max-w-3xl text-center">
+                <div className="mx-auto mt-6 max-w-7xl rounded-[2rem] border border-white/10 bg-white/[0.03] px-4 py-16 shadow-[0_0_60px_rgba(56,189,248,0.08)] backdrop-blur-xl sm:px-6 sm:py-24 lg:px-8 lg:py-32">
+                    <div className="mx-auto max-w-3xl text-center ">
                         <span className="inline-flex items-center rounded-full border border-sky-400/30 bg-sky-400/10 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-sky-300">
                             Premium Auctions Daily
                         </span>
@@ -94,7 +98,13 @@ function Home() {
 
                         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                             <button
-                                onClick={() => navigate("/dashboard/auctions")}
+                                onClick={() => {
+                                    document
+                                        .getElementById("upcoming-auctions")
+                                        ?.scrollIntoView({
+                                            behavior: "smooth"
+                                        });
+                                }}
                                 className="w-full rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] active:scale-95 sm:w-auto"
                             >
                                 Explore Auctions
@@ -135,17 +145,14 @@ function Home() {
             </section>
 
             {/* AUCTIONS */}
-            <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+            <section
+                id="upcoming-auctions"
+                className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8"
+            >
                 <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <h2 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">Upcoming Auctions</h2>
                     </div>
-                    <Link
-                        to="/dashboard/auctions"
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-sky-400 transition hover:text-sky-300"
-                    >
-                        View All <span aria-hidden>→</span>
-                    </Link>
                 </div>
 
                 {auctions.length === 0 ? (
@@ -228,12 +235,6 @@ function Home() {
                             </p>
                         </div>
                         <div>
-                            <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-500">Quick Links</h4>
-                            <ul className="mt-3 space-y-2 text-sm">
-                                <li><Link to="/" className="text-slate-300 transition hover:text-sky-400">Home</Link></li>
-                                <li><Link to="/dashboard/auctions" className="text-slate-300 transition hover:text-sky-400">Live Auctions</Link></li>
-                                <li><Link to="/register" className="text-slate-300 transition hover:text-sky-400">How it Works</Link></li>
-                            </ul>
                         </div>
                         <div>
                             <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-500">Contact</h4>
