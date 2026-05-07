@@ -84,6 +84,33 @@ function CreateAuction() {
         }
     }
 
+    async function generateAI() {
+
+        if (!form.title || !form.category) {
+            return alert("Enter title and category first");
+        }
+
+        try {
+
+            const res = await API.post(
+                "/generate-description",
+                {
+                    title: form.title,
+                    category: form.category
+                }
+            );
+
+            console.log(res.data)
+
+            setForm({
+                ...form,
+                description: res.data.description
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     // 🔥 Cleanup preview memory
     useEffect(() => {
         return () => {
@@ -143,13 +170,23 @@ function CreateAuction() {
                     {/* Description */}
                     <div className="md:col-span-2">
                         <label className="mb-2 block text-sm font-semibold text-slate-700">Detailed Description</label>
+                        <button
+                            type="button"
+                            className="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-slate-900/15 transition-all duration-300 hover:scale-[1.02] hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                            onClick={generateAI}
+                        >
+                            Generate AI Description 🤖
+                        </button>
                         <textarea
                             name="description"
+                            value = {form.description}
                             onChange={handleChange}
                             className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all min-h-[120px]"
                             placeholder="Describe the condition, features, and history of the item..."
                         />
+                        
                     </div>
+
                     <div>
                         <button
                             type="button"

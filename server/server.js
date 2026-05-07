@@ -11,6 +11,7 @@ import env from "dotenv";
 import cors from "cors";
 import { paymentRouter } from "./routes/payment.route.js";
 import { recommendRouter } from "./routes/recommendation.routes.js";
+import { AIrouter } from "./routes/ai.route.js";
 
 
 env.config();
@@ -37,6 +38,7 @@ app.use("/api",auctionRouter);
 app.use("/api",bidRouter);
 app.use("/api",paymentRouter);
 app.use("/api", recommendRouter);
+app.use("/api",AIrouter)
 app.get("/",(req,res)=>
 {
     res.send("Server running !!!");
