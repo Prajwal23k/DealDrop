@@ -413,14 +413,16 @@ function AuctionDetails() {
                                             </p>
 
                                             {/* PAY BUTTON */}
-                                            {auctionData?.winnerId?._id === user?._id && (
-                                                <button
-                                                    onClick={handlePayment}
-                                                    className="mt-4 w-full bg-green-600 text-white py-3 rounded-xl"
-                                                >
-                                                    Pay Now 💳
-                                                </button>
-                                            )}
+                                            {auctionData?.winnerId &&
+                                                auctionData?.bidCount > 0 &&
+                                                auctionData?.winnerId?._id === user?._id && (
+                                                    <button
+                                                        onClick={handlePayment}
+                                                        className="cursor-pointer mt-4 w-full bg-green-600 text-white py-3 rounded-xl"
+                                                    >
+                                                        Pay Now 💳
+                                                    </button>
+                                                )}
                                         </div>
                                     )}
 

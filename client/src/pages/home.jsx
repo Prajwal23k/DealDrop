@@ -50,7 +50,7 @@ function Home() {
                                 </div>
                                 <button
                                     onClick={logout}
-                                    className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15 active:scale-95"
+                                    className="cursor-pointer rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15 active:scale-95"
                                 >
                                     Logout
                                 </button>

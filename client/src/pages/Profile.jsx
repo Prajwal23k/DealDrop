@@ -156,7 +156,7 @@ function Profile() {
 
                         <button
                             onClick={handleLogout}
-                            className="w-full rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm font-semibold text-rose-300 transition hover:bg-rose-500/20 hover:text-rose-200"
+                            className="cursor-pointer w-full rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm font-semibold text-rose-300 transition hover:bg-rose-500/20 hover:text-rose-200"
                         >
                             Logout
                         </button>
