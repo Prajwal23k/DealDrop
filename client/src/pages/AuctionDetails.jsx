@@ -15,6 +15,7 @@ function AuctionDetails() {
     const [auctionData, setAuctionData] = useState(null);
     const [isSocketConnected, setIsSocketConnected] = useState(false);
     const [paying, setPaying] = useState(false);
+    const [timeLeft, setTimeLeft] = useState("");
 
     useEffect(() => {
         fetchAuction();
@@ -67,6 +68,56 @@ function AuctionDetails() {
             socket.disconnect();
         };
     }, [id]);
+
+    useEffect(() => {
+
+        if (!auctionData) return;
+
+        const interval = setInterval(() => {
+
+            const now = new Date();
+
+            let targetTime;
+
+            // 🔥 UPCOMING → countdown to start
+            if (auctionData.status === "UPCOMING") {
+                targetTime = new Date(auctionData.startTime);
+            }
+
+            // 🔥 LIVE → countdown to end
+            else if (auctionData.status === "LIVE") {
+                targetTime = new Date(auctionData.endTime);
+            }
+
+            else {
+                setTimeLeft("");
+                return;
+            }
+
+            const diff = targetTime - now;
+
+            if (diff <= 0) {
+                setTimeLeft("00:00:00");
+                return;
+            }
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            setTimeLeft(
+                `${hours.toString().padStart(2, "0")}:${minutes
+                    .toString()
+                    .padStart(2, "0")}:${seconds
+                        .toString()
+                        .padStart(2, "0")}`
+            );
+
+        }, 1000);
+
+        return () => clearInterval(interval);
+
+    }, [auctionData]);
 
     function handleBid(e) {
         e.preventDefault();
@@ -261,6 +312,62 @@ function AuctionDetails() {
                                 <div className="bg-indigo-600 px-6 py-4">
                                     <h2 className="text-white font-bold text-lg">Current Price</h2>
                                     <div className="text-4xl font-black text-white mt-1">₹{currentPrice}</div>
+
+                                    <div className="mt-3 rounded-xl bg-white/10 px-4 py-3 backdrop-blur">
+
+                                        {/* UPCOMING */}
+                                        {auctionData?.status === "UPCOMING" && (
+                                            <>
+                                                <p className="text-xs uppercase tracking-widest text-indigo-100">
+                                                    Starts In
+                                                </p>
+
+                                                <p className="mt-1 text-2xl font-black text-white tracking-wider">
+                                                    {timeLeft}
+                                                </p>
+                                            </>
+                                        )}
+
+                                        {/* LIVE */}
+                                        {auctionData?.status === "LIVE" && (
+                                            <>
+                                                <p className="text-xs uppercase tracking-widest text-indigo-100">
+                                                    Ends In
+                                                </p>
+
+                                                <p className="mt-1 text-2xl font-black text-white tracking-wider">
+                                                    {timeLeft}
+                                                </p>
+                                            </>
+                                        )}
+
+                                        {/* ENDED */}
+                                        {auctionData?.status === "ENDED" && (
+                                            <>
+                                                <p className="text-xs uppercase tracking-widest text-indigo-100">
+                                                    Auction Status
+                                                </p>
+
+                                                <p className="mt-1 text-xl font-black text-red-300">
+                                                    Auction Ended
+                                                </p>
+                                            </>
+                                        )}
+
+                                        {/* PAID */}
+                                        {auctionData?.status === "PAID" && (
+                                            <>
+                                                <p className="text-xs uppercase tracking-widest text-indigo-100">
+                                                    Payment Status
+                                                </p>
+
+                                                <p className="mt-1 text-xl font-black text-green-300">
+                                                    Payment Completed ✅
+                                                </p>
+                                            </>
+                                        )}
+
+                                    </div>
                                 </div>
 
                                 <div className="p-6">
