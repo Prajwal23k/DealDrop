@@ -1,4 +1,4 @@
-import {Auction} from "../models/auction.js";
+import { Auction } from "../models/auction.js";
 import { cloudinary } from "../config/cloudinary.js";
 
 async function createAuction(req, res) {
@@ -66,54 +66,49 @@ async function createAuction(req, res) {
     }
 }
 
-async function getAllAuctions(req,res)
-{
-    try{
-        const auctions = await Auction.find().sort({createdAt : -1});
+async function getAllAuctions(req, res) {
+    try {
+        const auctions = await Auction.find({
+            isBlocked: false
+        }).sort({ createdAt: -1 });
         res.status(200).json(auctions);
-    } catch (e)
-    {
+    } catch (e) {
         res.status(500).json({ message: "Failed to fetch auctions" });
     }
 }
 
-async function getAuctionById(req,res)
-{
-    try{
-        const {id} = req.params;
+async function getAuctionById(req, res) {
+    try {
+        const { id } = req.params;
         const auction = await Auction.findById(id)
-        .populate("winnerId","name email")
-        .populate("highestBidder","name");
+            .populate("winnerId", "name email")
+            .populate("highestBidder", "name");
 
-        if(!auction)
-        {
-            return res.status(404).json({message : "Auction Not Found"});
+        if (!auction) {
+            return res.status(404).json({ message: "Auction Not Found" });
         }
 
         return res.status(200).json(auction);
-    }catch(e)
-    {
+    } catch (e) {
         console.error(e.message);
-        return res.status(500).json({message : "Internal Server Error"});
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
-async function getMyAuctions(req,res)
-{
-    try{
+async function getMyAuctions(req, res) {
+    try {
         const userId = req.user.userId;
         const auctions = await Auction.find(
             {
-                sellerId : userId
+                sellerId: userId
             }
-        ).populate("winnerId","name").sort({ createdAt:-1});
+        ).populate("winnerId", "name").sort({ createdAt: -1 });
 
         res.status(200).json(auctions);
-    }catch(e)
-    {
+    } catch (e) {
         console.error(e.message);
-        res.status(500).json({ message : "Failed to fetch auctions"});
+        res.status(500).json({ message: "Failed to fetch auctions" });
     }
 }
 
-export {createAuction,getAllAuctions,getAuctionById,getMyAuctions};
+export { createAuction, getAllAuctions, getAuctionById, getMyAuctions };

@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
-import Logo from "../assets/Logo.png";
+import Logo from "../assets/Logo_dark_theme.png";
 
 function Sidebar() {
     const { user } = useContext(AuthContext);
@@ -15,20 +15,14 @@ function Sidebar() {
     return (
         <aside className="sticky top-0 h-screen w-full shrink-0 overflow-y-auto border-b border-white/10 bg-gradient-to-b from-black via-slate-950 to-slate-900 text-white shadow-2xl shadow-black/50 lg:w-72 lg:border-b-0 lg:border-r">
             <div className="flex h-full flex-col p-4 sm:p-5">
-                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] px-5 py-6 backdrop-blur-sm">
-                    <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-cyan-400/25 blur-2xl" />
-                    <div className="absolute -bottom-8 left-8 h-20 w-20 rounded-full bg-indigo-500/25 blur-2xl" />
+                
                     <div className="flex flex-col items-center justify-center">
-                        <img src={Logo} alt="DealDrop Logo" className="h-16 w-auto sm:h-20" />
+                        <img
+                        src={Logo}
+                        alt="DealDrop"
+                        className="h-14 w-14 rounded-2xl object-cover ring-1 ring-white/10 shadow-[0_0_25px_rgba(56,189,248,0.18)]"
+                    />
                     </div>
-                    <div className="mt-5 rounded-2xl border border-white/10 bg-black/40 p-4">
-                        <p className="text-xs text-slate-400">Signed in as</p>
-                        <p className="mt-1 truncate text-base font-semibold text-white sm:text-lg">{user?.name}</p>
-                        <p className="mt-2 inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-cyan-300">
-                            {user?.role}
-                        </p>
-                    </div>
-                </div>
 
                 <nav className="mt-6 flex-1 space-y-2">
                     {[

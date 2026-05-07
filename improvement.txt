@@ -1,7 +1,6 @@
-pay now option showing to seller/admin
 auction disable option to admin
 Logo improvement
 Google Analytics / GTM
 UI improvement
 except cloud database
-homepage navigations
+docker
