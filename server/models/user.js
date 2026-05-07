@@ -26,6 +26,15 @@ const userSchema = mongoose.Schema(
             enum: ["NONE", "PENDING", "APPROVED", "REJECTED"],
             default: "NONE"
         },
+        sellerType: {
+            type: String
+        },
+        sellingCategory: {
+            type: String
+        },
+        sellerReason: {
+            type: String
+        },
         isVerified: {
             type: Boolean,
             default: false

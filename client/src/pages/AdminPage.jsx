@@ -128,6 +128,35 @@ function AdminPage() {
                                                 <span className="font-semibold text-slate-400">Email</span>
                                                 <span className="truncate text-right font-bold text-white">{user.email}</span>
                                             </div>
+                                            <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+                                                <span className="font-semibold text-slate-400">
+                                                    Seller Type
+                                                </span>
+
+                                                <span className="font-bold text-white">
+                                                    {user.sellerType || "N/A"}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3">
+                                                <span className="font-semibold text-slate-400">
+                                                    Category
+                                                </span>
+
+                                                <span className="font-bold text-white">
+                                                    {user.sellingCategory || "N/A"}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex flex-col gap-2 border-b border-white/10 pb-3">
+                                                <span className="font-semibold text-slate-400">
+                                                    Seller Reason
+                                                </span>
+
+                                                <p className="rounded-xl bg-white/[0.03] p-3 text-sm leading-relaxed text-slate-200">
+                                                    {user.sellerReason || "No reason provided"}
+                                                </p>
+                                            </div>
                                             <div className="flex items-center justify-between gap-3">
                                                 <span className="font-semibold text-slate-400">User ID</span>
                                                 <span className="max-w-[60%] truncate text-right font-mono text-xs text-slate-400">
