@@ -104,37 +104,67 @@ async function upgradeToSeller(req, res) {
     }
 }
 
+
 async function requestSeller(req, res) {
+
     try {
+
         const userId = req.user.userId;
+
+        const {
+            sellerType,
+            sellingCategory,
+            sellerReason
+        } = req.body;
 
         const user = await User.findById(userId);
 
-        if (user.role == "seller") {
-            return res.status(400).json({ message: "Already a Seller" });
+        if (user.role === "seller") {
+            return res.status(400).json({
+                message: "Already a Seller"
+            });
         }
 
-        if (user.sellerRequest == "PENDING") {
-            return res.status(400).json({ message: "Request already pending" });
+        if (user.sellerRequest === "PENDING") {
+            return res.status(400).json({
+                message: "Request already pending"
+            });
         }
+
+        console.log(req.body);
+
+        // 🔥 Store request details
+        user.sellerType = sellerType;
+        user.sellingCategory = sellingCategory;
+        user.sellerReason = sellerReason;
 
         user.sellerRequest = "PENDING";
-        await user.save();
 
-        return res.status(200).json({ message: "Seller request submitted" })
-    }
-    catch (e) {
+
+        await user.save();
+        console.log(user);
+
+        return res.status(200).json({
+            message: "Seller request submitted"
+        });
+
+    } catch (e) {
+
         console.error(e.message);
-        res.status(500).json({ message: "Request Failed" });
+
+        return res.status(500).json({
+            message: "Request Failed"
+        });
     }
 }
-
 async function getSellerRequests(req, res) {
     try {
         const users = await User.find({
             sellerRequest: "PENDING"
-        }).select("name email");
-
+        }).select(
+            "name email role sellerType sellingCategory sellerReason sellerRequest"
+        );
+        console.log(users);
         res.status(200).json(users);
     } catch (e) {
         res.status(500).json({ message: "Error fetching requests" });

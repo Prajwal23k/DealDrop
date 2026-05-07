@@ -3,11 +3,19 @@ import { AuthContext } from "../context/authContext.jsx";
 import { useState } from "react";
 import { useEffect } from "react";
 import { API } from "../api/axios.js"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Profile() {
     const [userData, setUserData] = useState(null);
     const { logout } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [showSellerForm, setShowSellerForm] = useState(false);
+
+    const [sellerForm, setSellerForm] = useState({
+        sellerType: "",
+        sellingCategory: "",
+        sellerReason: ""
+    });
 
     useEffect(() => {
         fetchProfile();
@@ -23,18 +31,38 @@ function Profile() {
     }
 
     async function requestSeller() {
+
         try {
-            const res = await API.post("/request-seller");
+
+            const res = await API.post(
+                "/request-seller",
+                sellerForm
+            );
+
             alert(res.data.message);
+
+            setShowSellerForm(false);
+
+            setSellerForm({
+                sellerType: "",
+                sellingCategory: "",
+                sellerReason: ""
+            });
+
             fetchProfile();
+
         } catch (e) {
-            alert(e.response?.data?.message);
+
+            alert(
+                e.response?.data?.message ||
+                "Request failed"
+            );
         }
     }
 
     async function handleLogout() {
         logout();
-        Navigate("/", { replace: true });
+        navigate("/", { replace: true });
     }
 
     if (!userData) return (
@@ -119,7 +147,7 @@ function Profile() {
                     <div className="mt-6 space-y-3">
                         {userData.role !== "seller" && userData.role !== "admin" && (
                             <button
-                                onClick={requestSeller}
+                                onClick={() => setShowSellerForm(true)}
                                 className="w-full rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-[1.02] hover:shadow-sky-500/40"
                             >
                                 Request Seller Access
@@ -135,6 +163,106 @@ function Profile() {
                     </div>
                 </div>
             </div>
+            {showSellerForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+
+                    <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-slate-900 p-6 shadow-2xl">
+
+                        <h2 className="text-2xl font-black text-white">
+                            Seller Request
+                        </h2>
+
+                        <p className="mt-2 text-sm text-slate-400">
+                            Tell us what kind of seller you want to become.
+                        </p>
+
+                        {/* Seller Type */}
+                        <div className="mt-6">
+                            <label className="text-sm font-semibold text-slate-300">
+                                Seller Type
+                            </label>
+
+                            <select
+                                value={sellerForm.sellerType}
+                                onChange={(e) =>
+                                    setSellerForm({
+                                        ...sellerForm,
+                                        sellerType: e.target.value
+                                    })
+                                }
+                                className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-800 px-4 py-3 text-white outline-none focus:border-sky-400"
+                            >
+                                <option value="">Select Type</option>
+                                <option value="Individual">Individual</option>
+                                <option value="Business">Business</option>
+                            </select>
+                        </div>
+
+                        {/* Category */}
+                        <div className="mt-4">
+                            <label className="text-sm font-semibold text-slate-300">
+                                Selling Category
+                            </label>
+
+                            <select
+                                value={sellerForm.sellingCategory}
+                                onChange={(e) =>
+                                    setSellerForm({
+                                        ...sellerForm,
+                                        sellingCategory: e.target.value
+                                    })
+                                }
+                                className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-800 px-4 py-3 text-white outline-none focus:border-sky-400"
+                            >
+                                <option value="">Select Category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Fashion">Fashion</option>
+                                <option value="Home">Home</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Jewellery">Jewellery</option>
+                            </select>
+                        </div>
+
+                        {/* Reason */}
+                        <div className="mt-4">
+                            <label className="text-sm font-semibold text-slate-300">
+                                Reason
+                            </label>
+
+                            <textarea
+                                placeholder="Why do you want seller access?"
+                                value={sellerForm.sellerReason}
+                                onChange={(e) =>
+                                    setSellerForm({
+                                        ...sellerForm,
+                                        sellerReason: e.target.value
+                                    })
+                                }
+                                className="mt-2 min-h-[120px] w-full rounded-2xl border border-white/10 bg-slate-800 px-4 py-3 text-white outline-none focus:border-sky-400"
+                            />
+                        </div>
+
+                        {/* Buttons */}
+                        <div className="mt-6 flex justify-end gap-3">
+
+                            <button
+                                onClick={() => setShowSellerForm(false)}
+                                className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                onClick={requestSeller}
+                                className="rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-[1.02]"
+                            >
+                                Submit Request
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 
