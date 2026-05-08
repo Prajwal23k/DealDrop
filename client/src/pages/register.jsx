@@ -64,7 +64,7 @@ function Register() {
 
                 <form onSubmit={handleSubmit} className="mt-8 space-y-5">
                     {[
-                        { name: "name", label: "Full name", type: "text", placeholder: "John Doe" },
+                        { name: "name", label: "Full name", type: "text", placeholder: "Your Name" },
                         { name: "email", label: "Email address", type: "email", placeholder: "you@example.com" },
                         { name: "phone", label: "Phone number", type: "tel", placeholder: "+91 98765 43210" },
                         { name: "password", label: "Password", type: "password", placeholder: "••••••••" },
@@ -85,7 +85,7 @@ function Register() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+                        className="cursor-pointer flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
                     >
                         {loading ? (
                             <span className="flex items-center gap-2">
@@ -99,7 +99,7 @@ function Register() {
 
                     <p className="text-center text-sm text-slate-400">
                         Already have an account?{" "}
-                        <button type="button" onClick={() => navigate("/login")} className="font-semibold text-sky-400 hover:text-sky-300">
+                        <button type="button" onClick={() => navigate("/login")} className="cursor-pointer font-semibold text-sky-400 hover:text-sky-300">
                             Sign in
                         </button>
                     </p>

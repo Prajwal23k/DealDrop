@@ -61,7 +61,7 @@ function Home() {
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="rounded-full px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10">
+                                <Link to="/login" className="rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgba(56,189,248,0.35)] transition hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_28px_rgba(99,102,241,0.5)] active:scale-95">
                                     Login
                                 </Link>
                                 <Link
@@ -105,7 +105,7 @@ function Home() {
                                             behavior: "smooth"
                                         });
                                 }}
-                                className="w-full rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] active:scale-95 sm:w-auto"
+                                className="cursor-pointer w-full rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-3 font-semibold text-white shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] active:scale-95 sm:w-auto"
                             >
                                 Explore Auctions
                             </button>
@@ -224,29 +224,137 @@ function Home() {
             </section>
 
             {/* FOOTER */}
-            <footer className="border-t border-white/10 bg-slate-950">
-                <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                    <div className="grid gap-10 md:grid-cols-3">
+            <footer className="relative border-t border-white/10 bg-slate-950 overflow-hidden">
+
+                {/* Glow Effects */}
+                <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute left-0 top-0 h-40 w-40 rounded-full bg-sky-500/10 blur-3xl" />
+                    <div className="absolute right-0 bottom-0 h-40 w-40 rounded-full bg-indigo-500/10 blur-3xl" />
+                </div>
+
+                {/* Top Gradient Line */}
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-sky-500/40 to-transparent" />
+
+                <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+
+                    <div className="grid gap-12 md:grid-cols-3">
+
+                        {/* Brand */}
                         <div>
-                            <h4 className="text-lg font-black text-white">DealDrop</h4>
-                            <p className="mt-3 text-sm text-slate-400">
-                                Your destination for exclusive auctions, collectible finds, and everyday deals
-                                with a cleaner bidding experience.
+
+                            <div className="flex items-center gap-4">
+
+                                <img
+                                    src={Logo}
+                                    alt="DealDrop"
+                                    className="h-14 w-14 rounded-2xl object-cover ring-1 ring-white/10 shadow-[0_0_25px_rgba(56,189,248,0.18)]"
+                                />
+
+                                <div>
+                                    <h2 className="text-2xl font-black text-white">
+                                        DealDrop
+                                    </h2>
+
+                                    <p className="text-xs uppercase tracking-[0.3em] text-sky-400">
+                                        Premium Auctions
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
+                                Your destination for exclusive auctions, collectible finds,
+                                and everyday deals with a faster, cleaner, and more secure
+                                bidding experience.
                             </p>
+
+                            
                         </div>
+
+                        {/* Quick Links */}
                         <div>
-                        </div>
-                        <div>
-                            <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-500">Contact</h4>
-                            <ul className="mt-3 space-y-2 text-sm text-slate-300">
-                                <li>support@dealdrop.com</li>
-                                <li>+1 (800) DEAL-DRP</li>
+                            <h4 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+                                Quick Links
+                            </h4>
+
+                            <ul className="mt-5 space-y-4 text-sm text-slate-300">
+
+                                <li>
+                                    <Link
+                                        to="/"
+                                        className="transition hover:text-sky-300"
+                                    >
+                                        Home
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link
+                                        to="/dashboard"
+                                        className="transition hover:text-sky-300"
+                                    >
+                                        Browse Auctions
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link
+                                        to="/login"
+                                        className="transition hover:text-sky-300"
+                                    >
+                                        Login
+                                    </Link>
+                                </li>
+
+                                <li>
+                                    <Link
+                                        to="/register"
+                                        className="transition hover:text-sky-300"
+                                    >
+                                        Register
+                                    </Link>
+                                </li>
+
                             </ul>
                         </div>
+
+                        {/* Contact */}
+                        <div>
+                            <h4 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+                                Contact
+                            </h4>
+
+                            <ul className="mt-5 space-y-4 text-sm text-slate-300">
+
+                                <li className="flex items-center gap-3">
+                                    <span className="text-sky-400">✉</span>
+                                    support@dealdrop.com
+                                </li>
+
+                                <li className="flex items-center gap-3">
+                                    <span className="text-sky-400">📞</span>
+                                    +1 (800) DEAL-DRP
+                                </li>
+
+                                <li className="flex items-center gap-3">
+                                    <span className="text-sky-400">📍</span>
+                                    Thane, India
+                                </li>
+
+                            </ul>
+                        </div>
+
                     </div>
-                    <p className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-slate-500">
-                        © {new Date().getFullYear()} DealDrop Inc. All rights reserved.
-                    </p>
+
+                    {/* Bottom */}
+                    <div className="mt-12 border-t border-white/10 pt-6 text-center">
+
+                        <p className="text-xs tracking-wide text-slate-500">
+                            © {new Date().getFullYear()} DealDrop Inc. All rights reserved.
+                        </p>
+
+                    </div>
+
                 </div>
             </footer>
         </div>

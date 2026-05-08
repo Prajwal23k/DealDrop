@@ -67,7 +67,7 @@ function DashboardAuctions() {
                         <article
                             key={auction._id}
                             onClick={() => navigate(`/auction/${auction._id}`)}
-                            className="group cursor-pointer overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-lg backdrop-blur transition duration-300 hover:-translate-y-1.5 hover:border-sky-400/40 hover:shadow-[0_0_40px_rgba(56,189,248,0.18)] sm:p-5"
+                            className="group flex h-full flex-col cursor-pointer overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] p-4 shadow-lg backdrop-blur transition duration-300 hover:-translate-y-1.5 hover:border-sky-400/40 hover:shadow-[0_0_40px_rgba(56,189,248,0.18)] sm:p-5"
                         >
                             <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-xl bg-slate-800">
                                 <img
@@ -95,7 +95,7 @@ function DashboardAuctions() {
 
                             <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-400">{auction.description}</p>
 
-                            <div className="mt-5 flex items-end justify-between">
+                            <div className="mt-auto pt-5 flex items-end justify-between">
                                 <div>
                                     <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500">
                                         Current Bid
@@ -105,9 +105,6 @@ function DashboardAuctions() {
                                     </span>
                                 </div>
 
-                                <span className="text-sm font-semibold text-sky-400 transition group-hover:translate-x-1">
-                                    View details →
-                                </span>
                             </div>
                         </article>
                     ))}
