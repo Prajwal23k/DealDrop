@@ -79,18 +79,10 @@ function Login() {
                         />
                     </div>
 
-                    <div className="flex items-center justify-between text-sm">
-                        <label className="flex items-center gap-2 text-slate-300">
-                            <input type="checkbox" className="rounded border-white/20 bg-slate-900 text-sky-500 focus:ring-sky-400/40" />
-                            Remember me
-                        </label>
-                        <a href="#" className="font-semibold text-sky-400 hover:text-sky-300">Forgot password?</a>
-                    </div>
-
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+                        className="cursor-pointer flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 py-3 text-sm font-semibold text-white shadow-[0_0_30px_rgba(56,189,248,0.35)] transition hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 hover:shadow-[0_0_40px_rgba(99,102,241,0.55)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
                     >
                         {isLoading ? (
                             <span className="flex items-center gap-2">

@@ -104,9 +104,7 @@ function Profile() {
                 {/* User Info */}
                 <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-lg font-black uppercase text-white shadow-lg shadow-sky-500/30">
-                            {(userData.name || "U")[0]}
-                        </div>
+    
                         <h3 className="text-lg font-bold text-white">User Info</h3>
                     </div>
 
@@ -148,7 +146,7 @@ function Profile() {
                         {userData.role !== "seller" && userData.role !== "admin" && (
                             <button
                                 onClick={() => setShowSellerForm(true)}
-                                className="w-full rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-[1.02] hover:shadow-sky-500/40"
+                                className="cursor-pointer w-full rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-[1.02] hover:shadow-sky-500/40"
                             >
                                 Request Seller Access
                             </button>
@@ -247,14 +245,14 @@ function Profile() {
 
                             <button
                                 onClick={() => setShowSellerForm(false)}
-                                className="rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                                className="cursor-pointer rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                             >
                                 Cancel
                             </button>
 
                             <button
                                 onClick={requestSeller}
-                                className="rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-[1.02]"
+                                className="cursor-pointer rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:scale-[1.02]"
                             >
                                 Submit Request
                             </button>
